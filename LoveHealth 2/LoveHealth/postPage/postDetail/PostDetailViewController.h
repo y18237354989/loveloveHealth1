@@ -36,4 +36,6 @@
 @property (strong, nonatomic)UIButton *send;
 @property (strong, nonatomic)UIButton *collect;
 
+@property (strong,nonatomic)NSString *str;
+
 @end

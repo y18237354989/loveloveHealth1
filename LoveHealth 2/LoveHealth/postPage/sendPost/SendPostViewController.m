@@ -34,6 +34,8 @@
 
 @property (strong, nonatomic)UIImageView *tempImage; //临时存放选择的图片
 
+@property (strong,nonatomic)NSString *dateStr;
+
 @end
 
 @implementation SendPostViewController
@@ -48,6 +50,14 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
     [self createPart];
+    
+    //获取当前时间
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    
+    self.dateStr = [dateFormatter stringFromDate:[NSDate date]];
+
     
 }
 
@@ -97,7 +107,7 @@
     [self.sendBtn setBackgroundColor:COLOR(0, 204, 204, 1)];
     [self.sendBtn setTitle:@"确认发布" forState:UIControlStateNormal];
     [self.sendBtn setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
-    [self.sendBtn addTarget:self action:@selector(sendPost) forControlEvents:UIControlEventTouchUpInside];
+    [self.sendBtn addTarget:self action:@selector(sendPostNew) forControlEvents:UIControlEventTouchUpInside];
     self.sendBtn.layer.cornerRadius = 6;
     [self.view addSubview:self.sendBtn];
     
@@ -206,41 +216,26 @@
 }
 
 //发帖方法
--(void)sendPost{
+-(void)sendPostNew{
     
     if ([self.titleText.text isEqualToString:@""]||[self.contentView.text isEqualToString:@""]) {
         NSLog(@"标题或内容为空");
     }else{
          
-         if (self.tempImage.image != nil) {
-              NSDictionary *dic = @{@"userid":@"1",
+                       NSDictionary *dic = @{@"userid":@"1",
                                     @"postTypeid":@"1",
                                     @"postTitle":self.titleText.text,
                                     @"postword":self.contentView.text,
-                                    @"posttime":@"2016-04-06 15:00:00",
-                                    @"postimage":self.tempImage.image};
+                                    @"posttime":self.dateStr,
+                                    @"postimage":@""};
               
               [PostServerce sendPostWithDic:dic andWith:^(NSDictionary *dics) {
                    
                    NSDictionary *newdic = dics;
                    NSLog(@"%@",newdic);
               }];
-         }else{
-              
-              NSDictionary *dic = @{@"userid":@"1",
-                                    @"postTypeid":@"1",
-                                    @"postTitle":self.titleText.text,
-                                    @"postword":self.contentView.text,
-                                    @"posttime":@"2016-04-06 15:00:00",
-                                    @"postimage":self.tempImage.image};
-              
-              [PostServerce sendPostWithDic:dic andWith:^(NSDictionary *dics) {
-                   
-                   NSDictionary *newdic = dics;
-                   NSLog(@"%@",newdic);
-              }];
-
-         }
+        [self.navigationController popViewControllerAnimated:YES];
+        
        
     }
     

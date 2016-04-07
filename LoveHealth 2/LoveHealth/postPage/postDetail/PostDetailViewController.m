@@ -9,10 +9,14 @@
 #import "PostDetailViewController.h"
 #import "myNavigation.h"
 #import "Header.h"
+#import "PostServerce.h"
+#import "MJRefresh.h"
 
 @interface PostDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UMSocialUIDelegate>
 
 @property (strong, nonatomic)myNavigation * navigation;
+
+@property (strong,nonatomic)NSDictionary *dic;
 
 @end
 
@@ -21,7 +25,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     
+    
+    NSLog(@"dic--->%@",_dic);
      //使用自定义导航栏
      self.navigationController.navigationBar.hidden = YES;
      self.navigation=[[myNavigation alloc]initWithBgImg:nil andTitleLabel:@"热帖详情" andTitleImg:nil andleftBtn:@"back_48px_1125197_easyicon.net.png" andRightBtn:@"share_48px_1182213_easyicon.net"];
@@ -38,7 +43,23 @@
      
      [self createTableHead];
      [self createCommentView];
-     
+    [self DropDownRefresh];
+}
+//下拉刷新
+-(void)DropDownRefresh{
+    NSDictionary *dic = @{@"postid":_str};
+    [PostServerce getPostContentWithDic:dic andWith:^(NSDictionary *dics) {
+        NSDictionary *dic1=dics;
+        NSArray *arr=[dic1 objectForKey:@"result"];
+        self.dic =arr[0];
+        [self createTableHead];
+        [self createCommentView];
+    }];
+    
+    self.postDetailTable.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        
+        [self.postDetailTable.mj_header endRefreshing];
+    }];
 }
 
 //页面布局(tableHead)
@@ -48,7 +69,7 @@
      [self.postDetailTable addSubview:self.postDetailTable.tableHeaderView];
      
      self.postTitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, WIDTH5S(290), HEIGHT5S(20))];
-     self.postTitle.text = @"健康新发现";
+     self.postTitle.text = [self.dic objectForKey:@"post_title"];
      self.postTitle.textAlignment = 0;
      self.postTitle.font = FONT(15);
      [self.postDetailTable.tableHeaderView addSubview:self.postTitle];
@@ -67,7 +88,7 @@
      
      self.date = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(65), HEIGHT5S(65), WIDTH5S(150), HEIGHT5S(15))];
      self.date.textAlignment = 0;
-     self.date.text = @"2016-04-06";
+     self.date.text = [self.dic objectForKey:@"post_time"];
      self.date.font = FONT(12);
      [self.postDetailTable.tableHeaderView addSubview:self.date];
      
@@ -85,6 +106,7 @@
      self.postText = [[UILabel alloc]initWithFrame:CGRectMake(15, HEIGHT5S(100), WIDTH5S(290), HEIGHT5S(200))];
      self.postText.font = FONT(15);
      self.postText.textColor = COLOR(100, 100, 100, 1);
+     self.postText.text = [self.dic objectForKey:@"post_text"];
      [self.postDetailTable.tableHeaderView addSubview:self.postText];
      
 }
@@ -101,7 +123,7 @@
      self.text.placeholder = @"  评论";
      [self.commentView addSubview:self.text];
      
-     self.send = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(245), 10, WIDTH5S(30), HEIGHT5S(28))];
+     self.send = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(245), 10, WIDTH5S(50), HEIGHT5S(28))];
      [self.send setTitle:@"发送" forState:UIControlStateNormal];
      [self.send setTitleColor:COLOR(150, 150, 150, 1) forState:UIControlStateNormal];
      [self.commentView addSubview:self.send];

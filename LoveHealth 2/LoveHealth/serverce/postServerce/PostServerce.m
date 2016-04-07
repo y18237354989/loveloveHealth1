@@ -20,7 +20,9 @@
     NSString *url = @"http://139.129.50.9/Healthapp/index.php/home/post/newpost";
     
     NSMutableDictionary *mutdic = [NSMutableDictionary dictionaryWithCapacity:0];
+
     [mutdic setDictionary:dic];
+
     
     [manager POST:url parameters:mutdic progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         
@@ -33,6 +35,7 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
+
 }
 
 +(void)getPostWithDic:(NSDictionary *)dic andWith:(void (^)(NSDictionary *))success{
@@ -52,4 +55,24 @@
         
     }];
 }
+
++(void)getPostContentWithDic:(NSDictionary *)dic andWith:(void (^)(NSDictionary *))success{
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    
+    manager.responseSerializer = [AFJSONResponseSerializer serializer];
+    
+    NSString *url = [NSString stringWithFormat:@"http://139.129.50.9/Healthapp/index.php/home/post/detail?postid=%@",[dic objectForKey:@"postid"]
+                     ];
+    [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSDictionary *dic1 = responseObject;
+        
+        success(dic1);
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
+}
+
+
 @end

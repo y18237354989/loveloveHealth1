@@ -15,6 +15,7 @@
 
 +(void)getPostWithDic:(NSDictionary *)dic andWith:(void(^)(NSDictionary *dics))success;
 
++(void)getPostContentWithDic:(NSDictionary *)dic andWith:(void(^)(NSDictionary *dics))success;
 
 
 @end
