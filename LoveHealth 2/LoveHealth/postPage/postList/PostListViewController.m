@@ -53,12 +53,16 @@
      [self.picArr addObject:@"1.1.jpg"];
     
     
-    
-    if (self.result.count<5) {
-        self.i = self.result.count;
+    if (self.result == nil) {
+        self.i =0;
     }else{
-        self.i = 5;
+        if (self.result.count<5) {
+            self.i = self.result.count;
+        }else{
+            self.i = 5;
+        }
     }
+   
     
     NSDictionary *dic =@{@"postType":@"1",
                          @"pageindex":@"1"
@@ -89,18 +93,22 @@
             self.i = self.i + 3;
             [self.postTable reloadData];
             [self.postTable.mj_header endRefreshing];
-            
-            if (self.i>self.result.count) {
-                self.i = _result.count;
-                [self.postTable reloadData];
+            if (self.result == nil) {
+                self.i=0;
                 [self.postTable.mj_header endRefreshing];
+            }else{
+                if (self.i>self.result.count) {
+                    self.i = _result.count;
+                    [self.postTable reloadData];
+                    [self.postTable.mj_header endRefreshing];
+                }
             }
+            
         }];
     }];
 }
 //上拉刷新
 -(void)PullRefresh{
-    self.i = 5;
     self.postTable.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
         
         NSDictionary *dic =@{@"postType":@"1",
@@ -114,12 +122,17 @@
             self.i = self.i + 3;
             [self.postTable reloadData];
             [self.postTable.mj_footer endRefreshing];
-            if (self.i>self.result.count) {
-                self.i = _result.count;
-                [self.postTable reloadData];
-                [self.postTable.mj_footer endRefreshingWithNoMoreData];
-                self.postTable.mj_footer.hidden = YES;
+            if (self.result == nil) {
+                self.i = 0;
+            }else{
+                if (self.i>self.result.count) {
+                    self.i = _result.count;
+                    [self.postTable reloadData];
+                    [self.postTable.mj_footer endRefreshingWithNoMoreData];
+                    self.postTable.mj_footer.hidden = YES;
+                }
             }
+            
         }];
     }];
 }
