@@ -52,7 +52,7 @@
      self.picArr = [NSMutableArray arrayWithCapacity:0];
      [self.picArr addObject:@"1.1.jpg"];
     
-    
+    //判断请求数据是否为空
     if (self.result == nil) {
         self.i =0;
     }else{
