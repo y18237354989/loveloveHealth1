@@ -9,8 +9,8 @@
 #import "SendPostViewController.h"
 #import "Header.h"
 #import "YCXMenu.h"
-
-@interface SendPostViewController ()<UITextViewDelegate>
+#import "PostServerce.h"
+@interface SendPostViewController ()<UITextViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property (strong,nonatomic)UILabel *titleLabel;
 
@@ -32,6 +32,8 @@
 
 @property (strong,nonatomic)UIView *view1;
 
+@property (strong, nonatomic)UIImageView *tempImage; //临时存放选择的图片
+
 @end
 
 @implementation SendPostViewController
@@ -41,7 +43,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.navigationItem.title = @"发贴子";
+    self.navigationItem.title = @"发帖子";
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -95,6 +97,7 @@
     [self.sendBtn setBackgroundColor:COLOR(0, 204, 204, 1)];
     [self.sendBtn setTitle:@"确认发布" forState:UIControlStateNormal];
     [self.sendBtn setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
+    [self.sendBtn addTarget:self action:@selector(sendPost) forControlEvents:UIControlEventTouchUpInside];
     self.sendBtn.layer.cornerRadius = 6;
     [self.view addSubview:self.sendBtn];
     
@@ -107,9 +110,144 @@
     self.addpicBtn = [[UIButton alloc]initWithFrame:CGRectMake(235, 250, 50, 50)];
     [self.addpicBtn setImage:[UIImage imageNamed:@"AddPic"] forState:UIControlStateNormal];
     [self.view1 addSubview:self.addpicBtn];
+     [self.addpicBtn addTarget:self action:@selector(addPic) forControlEvents:UIControlEventTouchUpInside];
     
 }
 
+//添加图片调用此方法
+- (void)addPic{
+     
+     [self chosePic];
+}
+
+/*
+ 
+ 图片压缩上传步骤：
+ 1 选择图片
+ 2 图片裁剪
+ 3 图片压缩
+ 4 图片保存到沙盒
+ 5 从沙盒中获取压缩后图片并添加到相应位置
+ 
+ */
+
+//找到本地相册选择图片（1）
+- (void)chosePic{
+     
+     if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeSavedPhotosAlbum])
+     {
+          UIImagePickerController *imagePickerController = [[UIImagePickerController alloc]init];
+          imagePickerController.delegate = self;
+          imagePickerController.allowsEditing = YES;
+          imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+          [self presentViewController:imagePickerController animated:YES completion:^{}];
+     }
+}
+
+//裁剪（2）
+#pragma mark - image picker delegte
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+     [picker dismissViewControllerAnimated:YES completion:^{}];
+     
+     UIImage *image = [info objectForKey:UIImagePickerControllerEditedImage];
+     /* 此处info 有六个值
+      * UIImagePickerControllerMediaType; // an NSString UTTypeImage)
+      * UIImagePickerControllerOriginalImage;  // a UIImage 原始图片
+      * UIImagePickerControllerEditedImage;    // a UIImage 裁剪后图片
+      * UIImagePickerControllerCropRect;       // an NSValue (CGRect)
+      * UIImagePickerControllerMediaURL;       // an NSURL
+      * UIImagePickerControllerReferenceURL    // an NSURL that references an asset in the AssetsLibrary framework
+      * UIImagePickerControllerMediaMetadata    // an NSDictionary containing metadata from a captured photo
+      */
+     [self saveImage:image withName:@"sdddssds.png"];
+     
+}
+
+//取消选择
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+     [self dismissViewControllerAnimated:YES completion:^{}];
+}
+
+
+#pragma mark - 保存图片至沙盒 （4）
+- (void) saveImage:(UIImage *)currentImage withName:(NSString *)imageName
+{
+     
+     UIImage *image = [self image:currentImage andWithWidth:600];
+     NSData *imageData = UIImageJPEGRepresentation(image, 0.6);
+     // 获取沙盒目录
+     
+     NSString *fullPath = [[NSHomeDirectory() stringByAppendingPathComponent:@"Documents"] stringByAppendingPathComponent:imageName];
+     // 将图片写入文件
+     
+     [imageData writeToFile:fullPath atomically:YES];
+     
+     //将压缩后的图片添加到需要位置（5）
+     [self.addpicBtn setBackgroundImage:[UIImage imageWithContentsOfFile:fullPath] forState:UIControlStateNormal];
+     self.tempImage.image = [UIImage imageWithContentsOfFile:fullPath];
+     
+}
+
+//   图片压缩（3）（2个参数：第一个是需要压缩的图片名，第二个是压缩后的宽度）
+- (UIImage *)image:(UIImage *)sourceImage andWithWidth:(CGFloat)Width{
+     CGFloat width = sourceImage.size.width;
+     CGFloat height = sourceImage.size.height;
+     CGFloat targetWidth = Width;
+     CGFloat targetHeight = (targetWidth/width)*height;
+     
+     UIGraphicsBeginImageContext(CGSizeMake(targetWidth, targetHeight));
+     [sourceImage drawInRect:CGRectMake(0, 0, targetWidth, targetHeight)];
+     
+     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+     UIGraphicsEndImageContext();
+     return newImage;
+}
+
+//发帖方法
+-(void)sendPost{
+    
+    if ([self.titleText.text isEqualToString:@""]||[self.contentView.text isEqualToString:@""]) {
+        NSLog(@"标题或内容为空");
+    }else{
+         
+         if (self.tempImage.image != nil) {
+              NSDictionary *dic = @{@"userid":@"1",
+                                    @"postTypeid":@"1",
+                                    @"postTitle":self.titleText.text,
+                                    @"postword":self.contentView.text,
+                                    @"posttime":@"2016-04-06 15:00:00",
+                                    @"postimage":self.tempImage.image};
+              
+              [PostServerce sendPostWithDic:dic andWith:^(NSDictionary *dics) {
+                   
+                   NSDictionary *newdic = dics;
+                   NSLog(@"%@",newdic);
+              }];
+         }else{
+              
+              NSDictionary *dic = @{@"userid":@"1",
+                                    @"postTypeid":@"1",
+                                    @"postTitle":self.titleText.text,
+                                    @"postword":self.contentView.text,
+                                    @"posttime":@"2016-04-06 15:00:00",
+                                    @"postimage":self.tempImage.image};
+              
+              [PostServerce sendPostWithDic:dic andWith:^(NSDictionary *dics) {
+                   
+                   NSDictionary *newdic = dics;
+                   NSLog(@"%@",newdic);
+              }];
+
+         }
+       
+    }
+    
+}
+
+
+//标签菜单
 - (void)ChooseMark:(UIButton *)sender{
     
 //    ChooseMarkViewController *cvc = [[ChooseMarkViewController alloc]init];
