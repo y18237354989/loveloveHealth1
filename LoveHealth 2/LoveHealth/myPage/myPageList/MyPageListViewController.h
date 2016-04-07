@@ -1,0 +1,17 @@
+//
+//  MyPageListViewController.h
+//  LoveHealth
+//
+//  Created by administrator on 16/3/26.
+//  Copyright © 2016年 yjh. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface MyPageListViewController : UIViewController
+
+@property (strong, nonatomic)UIView *bgView;
+
+@property (strong, nonatomic)UITableView *myTable;
+
+@end
