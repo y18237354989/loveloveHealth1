@@ -15,19 +15,20 @@
 
 
 @interface NewsDetailViewController ()<UITextFieldDelegate,UITableViewDelegate,UITableViewDataSource,UMSocialUIDelegate>
-@property(strong,nonatomic)UIScrollView *sview;
-@property(strong,nonatomic)UIImageView  *images;
-@property(strong,nonatomic)UITextView  *newsDetail;
+@property (strong, nonatomic) UIScrollView *sview;
+@property (strong, nonatomic) UIImageView  *images;
+@property (strong, nonatomic) UITextView  *newsDetail;
 
-@property(assign,nonatomic)NSString *str;
-@property(strong,nonatomic)UIFont *font;
-@property (strong, nonatomic)myNavigation * navigation;
-@property(strong,nonatomic)UIView *commentView;
-@property(assign,nonatomic)double  f;
-@property(strong,nonatomic)UITextField *text1;
-@property(strong,nonatomic)UIView *view1;
-@property(strong,nonatomic)UITableView *tableview;
-@property(strong,nonatomic)NSMutableArray *commentArr;
+@property (assign, nonatomic) NSString *str;
+@property (strong, nonatomic) UIFont *font;
+@property (strong, nonatomic) myNavigation * navigation;
+@property (strong, nonatomic) UIView *commentView;
+@property (assign, nonatomic) double  f;
+@property (strong, nonatomic) UITextField *text1;
+@property (strong, nonatomic) UIView *view1;
+@property (strong, nonatomic) UITableView *tableview;
+@property (strong, nonatomic) NSMutableArray *commentArr;
+@property (assign, nonatomic) float h;  //监控键盘高度
 
 //cell的tag
 @property (assign, nonatomic)long int number;
@@ -54,7 +55,7 @@
      [self.view addSubview:self.navigation];
      
      
-     self.str=@"  中新网南京5月21日电 (田雯)21日下午，江苏省国家安全厅通报了近期破获的三起通过网络勾联策反间谍案例的相关情况。其中涉及机密级文件六件，多起案件涉及军事设施和政府内部期刊、文件。　　三起案件中，判处刑期最高的是1985年出生的吴某涉密案。他在苏州打工期间，曾在国内各大兼职、招聘网站上发布求职简历，2013年7月被境外人员勾联策反，开始对我军用机场、部队驻地和训练场等军事目标开展预警观测情报的搜集，先后将120多张图片及相关描述文字材料经过压缩加密后报送给境外间谍情报机关，并获取间谍活动经费3800元。经鉴定，其报送的情资中有机密级文件5份，秘密级文件6份，对我军事安全造成严重危害。2014年6月，苏州市中级人民法院以“为境外刺探国家秘密罪”判处吴某有期徒刑十年，剥夺政治权利三年。　　1962年出生的赵某，是连云港某县文广局聘用人员，曾担任县文广局记者记通讯员近30年。2013年10月，被境外人员网上勾联策反。赵某通过向我党政机关内部关系人索要以及在当地县委文件分发室窃取等方式，半年内搜集并报送了我大量涉密内部期刊、文件资料。同时，赵某积极向我军事院校渗透，搜集报送多份军事报刊及军事报告，先后获取间谍活动经费74500元。经鉴定，其报送的情资中有秘密级文件11份。　　1991年出生的顾某，也是在某招聘网站求职过程中，被境外间谍嫌疑人勾联策反的。经查，从2013年10月至案发前，先后29次前往驻苏某部队军事目标区进行情况搜集，并用手机拍摄了大量动态性涉及军事领域的照片。顾某还购置了行车记录仪，多次赴军事目标区附近尾随跟拍军车，标注军车训练线路图。顾某共向境外报送我涉军照片93张，标注地图33张、卫星地图25张，走访报告29份，先后获取间谍活动经费34460元。经鉴定，其报送的情资中有机密级文件1份，秘密级文件3份。2015年2月，顾某被苏州市国家安全局依法执行逮捕多次赴军事目标区附近尾随跟拍军车，标注军车训练线路图。顾某共向境外报送我涉军照片93张，标注地图33张、卫星地图25张，走访报告29份，先后获取间谍活动经费34460元。经鉴定，其报送的情资中有机密级文件1份，秘密级文件3份。2015年2月，顾某被苏州市国家安全局依法执行逮捕多次赴军事目标区附近尾随跟拍军车，标注军车训练线路图。顾某共向境外报送我涉军照片93张，标注地图33张、卫星地图25张，走访报告29份，先后获取间谍活动经费34460元。经鉴定，其报送的情资中有机密级文件1份，秘密级文件3份。2015年2月，顾某被苏州市国家安全局依法执行逮捕";
+     self.str=@"  中新网南京5月21日电 (田雯)21日下午，江苏省国家安全厅通报了近期破获的三起通过网络勾联策反间谍案例的相关情况。其中涉及机密级文件六件，多起案件涉及军事设施和政府内部期刊、文件。　　三起案件中，判处刑期最高的是1985年出生的吴某涉密案。他在苏州打工期间，曾在国内各大兼职、招聘网站上发布求职简历，2013年7月被境外人员勾联策反，开始对我军用机场、部队驻地和训练场等军事目标开展预警观测情报的搜集，先后将120多张图片及相关描述文字材料经过压缩加密后报送给境外间谍情报机关，并获取间谍活动经费3800元。经鉴定，其报送的情资中有机密级文件5份，秘密级文件6份，对我军事安全造成严重危害。2014年6月，苏州市中级人民法院以“为境外刺探国家秘密罪”判处吴某有期徒刑十年，剥夺政治权利三年。　　1962年出生的赵某，是连云港某县文广局聘用人员，曾担任县文广局记者记通讯员近30年。2013年10月，被境外人员网上勾联策反。赵某通过向我党政机关内部关系人索要以及在当地县委文件分发室窃取等方式，半年内搜集并报送了我大量涉密内部期刊、文件资料。同时，赵某积极向我军事院校渗透，搜集报送多份军事报刊及军事报告，先后获取间谍活动经费74500元。经鉴定，其报送的情资中有秘密级文件11份。";
      
      self.commentArr = [NSMutableArray arrayWithCapacity:0];
      [self.commentArr addObject:@"1"];
@@ -64,11 +65,8 @@
      [self setTable];
      [self footview];
      
-}
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField{
-     
-     [self moveup];
+     //开启键盘位置监听
+     [self regNotification];
      
 }
 
@@ -119,9 +117,6 @@
           [imgview addSubview:self.newsDetail];
           
      }
-     
-     
-     
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -195,20 +190,42 @@
 }
 
 
--(void)moveup{
-     [UIView animateWithDuration:0.3 animations:^{
-          
-          self.view1.frame=CGRectMake(0, SCREEN_HEIGHT-300, SCREEN_WIDTH, 48);
-          
-     }];
+//键盘监听
+- (void)regNotification
+{
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
      
 }
+
+
+- (void)dealloc
+{
+     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+}
+//监听键盘y轴改变量(开始编辑)
+#pragma mark - notification handler
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
+{
+     
+     NSDictionary *info = [notification userInfo];
+     CGFloat duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+     CGRect beginKeyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+     CGRect endKeyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+     
+     CGFloat yOffset = endKeyboardRect.origin.y - beginKeyboardRect.origin.y;
+     CGRect intPutRect = self.view1.frame;
+     intPutRect.origin.y += yOffset;
+     NSLog(@"----->>%.1f",yOffset);
+     [UIView animateWithDuration:duration animations:^{
+          self.view1.frame = intPutRect;
+     }];
+}
+
 
 - (void)didReceiveMemoryWarning {
      [super didReceiveMemoryWarning];
      
 }
-
 
 //返回按钮
 -(void)toox{
@@ -244,7 +261,6 @@
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
      
      [self.view endEditing:YES];
-     self.view1.frame=CGRectMake(0, SCREEN_HEIGHT-48, SCREEN_WIDTH, 48);
      
 }
 //发送评论
@@ -260,10 +276,7 @@
           
           _text1.text=nil;
           [self.view endEditing:YES];
-          self.view1.frame=CGRectMake(0, SCREEN_HEIGHT-48, SCREEN_WIDTH, 48);
      }
-     
-     
 }
 
 //回复

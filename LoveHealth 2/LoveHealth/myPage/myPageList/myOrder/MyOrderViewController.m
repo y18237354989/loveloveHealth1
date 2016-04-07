@@ -65,6 +65,10 @@
      
      [self createCommentView];
      
+     
+     //监听键盘状态
+     [self regNotification];
+     
 }
 
 - (void)back{
@@ -106,8 +110,9 @@
 
 - (void)goComment{
      
+     
      [UIView animateWithDuration:0.3 animations:^{
-          self.sendCommentView.frame = CGRectMake(0, HEIGHT5S(152), SCREEN_WIDTH, HEIGHT5S(368));
+          self.sendCommentView.frame = CGRectMake(0, HEIGHT5S(280), SCREEN_WIDTH, HEIGHT5S(240));
           self.commentBackView.alpha = 0.4;
      }];
      
@@ -117,12 +122,13 @@
 - (void)createCommentView{
      
      
-     self.sendCommentView = [[UIView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(368))];
+     self.sendCommentView = [[UIView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(240))];
      self.sendCommentView.backgroundColor = COLOR(228, 228, 228, 1);
      [self.view addSubview:self.sendCommentView];
      
-     self.commentView = [[UITextView alloc]initWithFrame:CGRectMake(0, 0, WIDTH5S(320), HEIGHT5S(200))];
-     self.commentView.backgroundColor = COLOR(228, 228, 228, 1);
+     self.commentView = [[UITextView alloc]initWithFrame:CGRectMake(WIDTH5S(15), 20, WIDTH5S(290), HEIGHT5S(130))];
+     self.commentView.layer.cornerRadius = 10;
+     self.commentView.backgroundColor = COLOR(255, 255, 255, 1);
      self.commentView.textColor = COLOR(100, 100, 100, 1);
      self.commentView.font = FONT(15);
      self.commentView.delegate = self;
@@ -132,7 +138,10 @@
      self.commentView.autoresizingMask = UIViewAutoresizingFlexibleHeight;//自适高
      [self.sendCommentView addSubview:self.commentView];
      
-     self.typebtn1 = [[UIButton alloc]initWithFrame:CGRectMake(15, HEIGHT5S(210), WIDTH5S(90), HEIGHT5S(30))];
+     self.typebtn1 = [[UIButton alloc]initWithFrame:CGRectMake(15, HEIGHT5S(160), WIDTH5S(38), HEIGHT5S(20))];
+     self.typebtn1.layer.cornerRadius = 5;
+     self.typebtn1.layer.masksToBounds = YES;
+     [self.typebtn1 setFont:FONT(12)];
      [self.typebtn1 setTitle:@"质量好" forState:UIControlStateNormal];
      self.typebtn1.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn1 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -141,7 +150,10 @@
      [self.sendCommentView addSubview:self.typebtn1];
      [self.typebtn1 addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
      
-     self.typebtn2 = [[UIButton alloc]initWithFrame:CGRectMake(115, HEIGHT5S(210), WIDTH5S(90), HEIGHT5S(30))];
+     self.typebtn2 = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(63), HEIGHT5S(160), WIDTH5S(26), HEIGHT5S(20))];
+     self.typebtn2.layer.cornerRadius = 5;
+     self.typebtn2.layer.masksToBounds = YES;
+     [self.typebtn2 setFont:FONT(12)];
      [self.typebtn2 setTitle:@"便宜" forState:UIControlStateNormal];
      self.typebtn2.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn2 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -150,7 +162,10 @@
      [self.sendCommentView addSubview:self.typebtn2];
      [self.typebtn2 addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
      
-     self.typebtn3 = [[UIButton alloc]initWithFrame:CGRectMake(215, HEIGHT5S(210), WIDTH5S(90), HEIGHT5S(30))];
+     self.typebtn3 = [[UIButton alloc]initWithFrame:CGRectMake(99, HEIGHT5S(160), WIDTH5S(50), HEIGHT5S(20))];
+     self.typebtn3.layer.cornerRadius = 5;
+     self.typebtn3.layer.masksToBounds = YES;
+     [self.typebtn3 setFont:FONT(12)];
      [self.typebtn3 setTitle:@"快递不错" forState:UIControlStateNormal];
      self.typebtn3.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn3 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -159,7 +174,10 @@
      [self.sendCommentView addSubview:self.typebtn3];
      [self.typebtn3 addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
      
-     self.typebtn4 = [[UIButton alloc]initWithFrame:CGRectMake(15, HEIGHT5S(250), WIDTH5S(90), HEIGHT5S(30))];
+     self.typebtn4 = [[UIButton alloc]initWithFrame:CGRectMake(159, HEIGHT5S(160), WIDTH5S(38), HEIGHT5S(20))];
+     self.typebtn4.layer.cornerRadius = 5;
+     self.typebtn4.layer.masksToBounds = YES;
+     [self.typebtn4 setFont:FONT(12)];
      [self.typebtn4 setTitle:@"款式新" forState:UIControlStateNormal];
      self.typebtn4.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn4 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -168,7 +186,10 @@
      [self.sendCommentView addSubview:self.typebtn4];
      [self.typebtn4 addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
      
-     self.typebtn5 = [[UIButton alloc]initWithFrame:CGRectMake(115, HEIGHT5S(250), WIDTH5S(90), HEIGHT5S(30))];
+     self.typebtn5 = [[UIButton alloc]initWithFrame:CGRectMake(207, HEIGHT5S(160), WIDTH5S(38), HEIGHT5S(20))];
+     self.typebtn5.layer.cornerRadius = 5;
+     self.typebtn5.layer.masksToBounds = YES;
+     [self.typebtn5 setFont:FONT(12)];
      [self.typebtn5 setTitle:@"态度好" forState:UIControlStateNormal];
      self.typebtn5.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn5 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -177,7 +198,10 @@
      [self.sendCommentView addSubview:self.typebtn5];
      [self.typebtn5 addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
      
-     self.typebtn6 = [[UIButton alloc]initWithFrame:CGRectMake(215, HEIGHT5S(250), WIDTH5S(90), HEIGHT5S(30))];
+     self.typebtn6 = [[UIButton alloc]initWithFrame:CGRectMake(255, HEIGHT5S(160), WIDTH5S(50), HEIGHT5S(20))];
+     self.typebtn6.layer.cornerRadius = 5;
+     self.typebtn6.layer.masksToBounds = YES;
+     [self.typebtn6 setFont:FONT(12)];
      [self.typebtn6 setTitle:@"大小合适" forState:UIControlStateNormal];
      self.typebtn6.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn6 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -186,12 +210,24 @@
      [self.sendCommentView addSubview:self.typebtn6];
      [self.typebtn6 addTarget:self action:@selector(add:) forControlEvents:UIControlEventTouchUpInside];
      
-     self.sendComment = [[UIButton alloc]initWithFrame:CGRectMake(0, HEIGHT5S(320), SCREEN_WIDTH, HEIGHT5S(48))];
+     self.sendComment = [[UIButton alloc]initWithFrame:CGRectMake(165, HEIGHT5S(190), WIDTH5S(140), HEIGHT5S(30))];
+     self.sendComment.backgroundColor = COLOR(0, 210, 210, 1);
      [self.sendComment setTitle:@"发送评价" forState:UIControlStateNormal];
-     [self.sendComment setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateNormal];
+     [self.sendComment setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
+     self.sendComment.layer.cornerRadius = 10;
+     self.sendComment.layer.masksToBounds = YES;
      [self.sendCommentView addSubview:self.sendComment];
      
-     [self.sendComment addTarget:self action:@selector(send:) forControlEvents:UIControlEventTouchUpInside];
+     self.cancleComment = [[UIButton alloc]initWithFrame:CGRectMake(15, HEIGHT5S(190), WIDTH5S(140), HEIGHT5S(30))];
+     self.cancleComment.backgroundColor = COLOR(255, 255, 255, 1);
+     [self.cancleComment setTitle:@"取消评价" forState:UIControlStateNormal];
+     [self.cancleComment setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateNormal];
+     self.cancleComment.layer.cornerRadius = 10;
+     self.cancleComment.layer.masksToBounds = YES;
+     [self.sendCommentView addSubview:self.cancleComment];
+     
+     [self.sendComment addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+     [self.cancleComment addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)add:(UIButton *)sender{
@@ -201,7 +237,7 @@
      }
 }
 
-- (void)send:(UIButton *)sender{
+- (void)send{
      
      if (self.tags==101) {
           self.num1++;
@@ -230,18 +266,65 @@
      NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
      [user setObject:self.typeArr forKey:@"typeComment"];
      
+     [self.view endEditing:YES];
      [UIView animateWithDuration:0.3 animations:^{
-          self.sendCommentView.frame = CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(368));
+          self.sendCommentView.frame = CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(240));
           self.commentBackView.alpha = 0;
      }];
      
+     self.commentView.text = nil;
+}
+
+- (void)cancle{
+     
+     [self.view endEditing:YES];
+     [UIView animateWithDuration:0.3 animations:^{
+          self.sendCommentView.frame = CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(240));
+          self.commentBackView.alpha = 0;
+     }];
+     self.commentView.text = nil;
+}
+
+//键盘监听
+- (void)regNotification
+{
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
      
 }
 
+
+- (void)dealloc
+{
+     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+}
+//监听键盘y轴改变量(开始编辑)
+#pragma mark - notification handler
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
+{
+     
+     NSDictionary *info = [notification userInfo];
+     CGFloat duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+     CGRect beginKeyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+     CGRect endKeyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+     
+     CGFloat yOffset = endKeyboardRect.origin.y - beginKeyboardRect.origin.y + 48;
+     CGRect intPutRect = self.sendCommentView.frame;
+     intPutRect.origin.y += yOffset;
+     NSLog(@"----->>%.1f",yOffset);
+     [UIView animateWithDuration:duration animations:^{
+          self.sendCommentView.frame = intPutRect;
+     }];
+}
+
+
 -(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
      
-     [self.view endEditing:YES];
-     self.commentBackView.alpha = 0;
+     [UIView animateWithDuration:0.3 animations:^{
+          [self.view endEditing:YES];
+          self.sendCommentView.frame = CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(290));
+          self.commentBackView.alpha = 0;
+     }];
+     
 }
 
 - (void)didReceiveMemoryWarning {

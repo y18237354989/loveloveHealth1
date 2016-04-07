@@ -22,6 +22,7 @@
 @property (strong, nonatomic)UIView *commentBackView;  //阴影view
 @property (strong, nonatomic)UITextView *commentView;  //评价text
 @property (strong, nonatomic)UIButton *sendComment;
+@property (strong, nonatomic)UIButton *cancleComment;
 @property (strong, nonatomic)UIButton *typebtn1,*typebtn2,*typebtn3,*typebtn4,*typebtn5,*typebtn6;  //6种评价
 
 @end
