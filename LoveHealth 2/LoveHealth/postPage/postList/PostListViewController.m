@@ -52,8 +52,27 @@
      self.picArr = [NSMutableArray arrayWithCapacity:0];
      [self.picArr addObject:@"1.1.jpg"];
     
+    
+    
+    if (self.result.count<5) {
+        self.i = self.result.count;
+    }else{
+        self.i = 5;
+    }
+    
+    NSDictionary *dic =@{@"postType":@"1",
+                         @"pageindex":@"1"
+                         };
+    [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
+        NSDictionary *newdic1 = dics;
+        self.result = [newdic1 objectForKey:@"result"];
+        NSLog(@"%@",self.result);
+    }];
+    //下拉刷新
     [self DropDownRefresh];
+    //上拉刷新
     [self PullRefresh];
+
 }
 //下拉刷新
 -(void)DropDownRefresh{
@@ -66,8 +85,17 @@
             self.result = [newdic1 objectForKey:@"result"];
             NSLog(@"%@",self.result);
             [self.postTable reloadData];
+            
+            self.i = self.i + 3;
+            [self.postTable reloadData];
+            [self.postTable.mj_header endRefreshing];
+            
+            if (self.i>self.result.count) {
+                self.i = _result.count;
+                [self.postTable reloadData];
+                [self.postTable.mj_header endRefreshing];
+            }
         }];
-        [self.postTable.mj_header endRefreshing];
     }];
 }
 //上拉刷新
