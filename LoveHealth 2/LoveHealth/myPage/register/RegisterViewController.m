@@ -9,6 +9,7 @@
 #import "RegisterViewController.h"
 #import "Header.h"
 #import "RegisterServerceViewController.h"
+#import "AppDelegate.h"
 
 @interface RegisterViewController ()<UITextFieldDelegate>
 
@@ -24,6 +25,7 @@
 - (void)viewDidLoad {
      
      [super viewDidLoad];
+     self.navigationItem.title = @"注册";
      self.view.backgroundColor = COLOR(255, 255, 255, 1);
      [self createControl];
      
@@ -32,9 +34,8 @@
 //创建控件
 - (void)createControl{
     
-     self.picView = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(135), HEIGHT5S(79), WIDTH5S(50), HEIGHT5S(50))];
+     self.picView = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(0), HEIGHT5S(64), SCREEN_WIDTH, HEIGHT5S(80))];
      self.picView.image = IMAGE(@"1.1.jpg");
-     self.picView.layer.cornerRadius = 25;
      self.picView.layer.masksToBounds = YES;
      [self.view addSubview:self.picView];
      
@@ -43,6 +44,7 @@
      [self.view addSubview:self.userNumberLogo];
      
      self.userNumberText = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(45), HEIGHT5S(154), WIDTH5S(260), HEIGHT5S(20))];
+     self.userNumberText.font = FONT(14);
      self.userNumberText.placeholder = @"你的手机号";
      self.userNumberText.keyboardType = UIKeyboardTypeNamePhonePad;
      self.userNumberText.delegate = self;
@@ -50,10 +52,11 @@
      [self.view addSubview:self.userNumberText];
      
      self.passwordLogo = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(194), WIDTH5S(20), HEIGHT5S(20))];
-     self.passwordLogo.image = IMAGE(@"1.1.jpg");
+     self.passwordLogo.image = IMAGE(@"lock");
      [self.view addSubview:self.passwordLogo];
      
      self.passwordText = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(45), HEIGHT5S(194), WIDTH5S(260), HEIGHT5S(20))];
+     self.passwordText.font = FONT(14);
      self.passwordText.placeholder = @"请输入密码";
      self.passwordText.keyboardType = UIKeyboardTypeDefault;
      self.passwordText.tag = 1002;
@@ -61,6 +64,7 @@
      [self.view addSubview:self.passwordText];
      
      self.codeText = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(95), HEIGHT5S(234), WIDTH5S(260), HEIGHT5S(20))];
+     self.codeText.font = FONT(14);
      self.codeText.placeholder = @"请输入验证码";
      self.codeText.keyboardType = UIKeyboardTypeNamePhonePad;
      self.codeText.tag = 1003;
@@ -73,6 +77,7 @@
      self.codeBtn.layer.cornerRadius = 3;
      self.codeBtn.layer.masksToBounds = YES;
      [self.view addSubview:self.codeBtn];
+     [self.codeBtn addTarget:self action:@selector(code) forControlEvents:UIControlEventTouchUpInside];
      
      self.userNumLine = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(183), WIDTH5S(290), HEIGHT5S(1))];
      self.userNumLine.backgroundColor = COLOR(228, 228, 228, 1);
@@ -99,7 +104,44 @@
      
 }
 
+
+//获取验证码
+- (void)code{
+     
+     [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:self.userNumberText.text zone:@"86" customIdentifier:nil result:^(NSError *error) {
+          if (!error) {
+               NSLog(@"获取验证成功");
+          }else{
+               NSLog(@"错误信息:%@",error);
+          }
+     }];
+}
+
+
+
 - (void)registerUser{
+     
+     //先验证信息  再注册
+//     [SMSSDK commitVerificationCode:self.codeText.text phoneNumber:self.userNumberText.text zone:@"86" result:^(NSError *error) {
+//          if (!error) {
+//               NSLog(@"验证成功");
+//               NSMutableDictionary *dics = [NSMutableDictionary dictionaryWithCapacity:0];
+//               [dics setObject:self.userNumberText.text forKey:@"tel"];
+//               [dics setObject:self.passwordText.text forKey:@"pwd"];
+//               
+//               [RegisterServerceViewController registerUser:dics and:^(NSMutableDictionary *dic) {
+//                    
+//                    if (dic == Nil) {
+//                         NSLog(@"register file");
+//                    }else{
+//                         [self.navigationController popViewControllerAnimated:YES];
+//                    }
+//               }];
+//          }else{
+//               NSLog(@"错误信息:%@",error);
+//          }
+//     }];
+     
      
      NSMutableDictionary *dics = [NSMutableDictionary dictionaryWithCapacity:0];
      [dics setObject:self.userNumberText.text forKey:@"tel"];
@@ -113,9 +155,11 @@
                [self.navigationController popViewControllerAnimated:YES];
           }
      }];
+     
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
      
      if (textField.tag == 1001) {
           self.userNumLine.backgroundColor = COLOR(0, 210, 210, 1);
@@ -130,8 +174,6 @@
           self.userNumLine.backgroundColor = COLOR(228, 228, 228, 1);
           self.passwordLine.backgroundColor = COLOR(228, 228, 228, 1);
      }
-     
-     return YES;
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField{

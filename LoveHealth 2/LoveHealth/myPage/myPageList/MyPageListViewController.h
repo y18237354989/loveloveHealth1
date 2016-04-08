@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic)UIView *bgView;
 
+@property (strong, nonatomic)UIImageView *bgImage;
+
 @property (strong, nonatomic)UITableView *myTable;
 
 @property (strong, nonatomic)UIImageView *userHeadImage;  //用户头像

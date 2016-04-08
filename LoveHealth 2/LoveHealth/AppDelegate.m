@@ -14,6 +14,7 @@
 #import "MyPageListViewController.h"
 #import "Header.h"
 #import <RongIMKit/RongIMKit.h>
+#import <SMS_SDK/SMSSDK.h>
 
 @interface AppDelegate ()<RCIMUserInfoDataSource,RCIMGroupInfoDataSource,QQApiInterfaceDelegate>
 
@@ -57,6 +58,9 @@
      //设置分享到QQ/Qzone的应用Id，和分享url 链接
      [UMSocialQQHandler setQQWithAppId:@"100424468" appKey:@"c7394704798a158208a74ab60104f0ba" url:@"http://www.umeng.com/social"];
      
+     
+     //短信验证
+     [SMSSDK registerApp:APPKEY withSecret:APPSECRET];
     
     
      self.window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];

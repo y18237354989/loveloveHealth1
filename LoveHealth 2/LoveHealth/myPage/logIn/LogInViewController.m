@@ -25,6 +25,7 @@
 
 - (void)viewDidLoad {
      [super viewDidLoad];
+     self.navigationItem.title = @"登录";
      self.view.backgroundColor = COLOR(255, 255, 255, 1);
      [self createControl];
 }
@@ -41,6 +42,7 @@
      [self.view addSubview:self.userNumberLogo];
      
      self.userNumberText = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(45), HEIGHT5S(154), WIDTH5S(260), HEIGHT5S(20))];
+     self.userNumberText.font = FONT(14);
      self.userNumberText.placeholder = @"你的手机号";
      self.userNumberText.keyboardType = UIKeyboardTypeNamePhonePad;
      self.userNumberText.tag = 1001;
@@ -48,10 +50,11 @@
      [self.view addSubview:self.userNumberText];
      
      self.passwordLogo = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(194), WIDTH5S(20), HEIGHT5S(20))];
-     self.passwordLogo.image = IMAGE(@"1.1.jpg");
+     self.passwordLogo.image = IMAGE(@"lock");
      [self.view addSubview:self.passwordLogo];
      
      self.passwordText = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(45), HEIGHT5S(194), WIDTH5S(260), HEIGHT5S(20))];
+     self.passwordText.font = FONT(14);
      self.passwordText.placeholder = @"请输入密码";
      self.passwordText.keyboardType = UIKeyboardTypeDefault;
      self.passwordText.tag = 1002;
@@ -112,7 +115,7 @@
      
 }
 
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
      
      if (textField.tag == 1001) {
           self.userNumLine.backgroundColor = COLOR(0, 210, 210, 1);
@@ -121,9 +124,8 @@
      }else if (textField.tag == 1002){
           self.passwordLine.backgroundColor = COLOR(0, 210, 210, 1);
           self.userNumLine.backgroundColor = COLOR(228, 228, 228, 1);
+          
      }
-     
-     return YES;
 }
 
 - (BOOL)textFieldShouldEndEditing:(UITextField *)textField{

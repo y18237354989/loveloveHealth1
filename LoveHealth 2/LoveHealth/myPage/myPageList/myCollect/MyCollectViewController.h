@@ -10,4 +10,6 @@
 
 @interface MyCollectViewController : UIViewController
 
+@property (strong, nonatomic)UITableView *myCollectTable;
+
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "MyPostViewController.h"
+#import "Header.h"
 
 @interface MyPostViewController ()
 
@@ -16,7 +17,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+     self.view.backgroundColor = COLOR(242, 242, 242, 1);
 }
 
 - (void)didReceiveMemoryWarning {

@@ -10,6 +10,8 @@
 #import "Header.h"
 #import "nearlistViewController.h"
 #import "newsServerceViewController.h"
+#import "MyCollectViewController.h"
+#import "MyPostViewController.h"
 #import "MyOrderViewController.h"
 #import "RegisterViewController.h"
 #import "LogInViewController.h"
@@ -30,14 +32,15 @@
 - (void)viewDidLoad {
      [super viewDidLoad];
      
-     self.myTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, WIDTH5S(320), HEIGHT5S(520)) style:UITableViewStyleGrouped];
+     self.myTable = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, WIDTH5S(320), HEIGHT5S(520)) style:UITableViewStylePlain];
      self.myTable.dataSource = self;
      self.myTable.delegate = self;
-     self.myTable.scrollEnabled = YES;
+     self.myTable.scrollEnabled = NO;
+     self.myTable.separatorStyle = NO; //隐藏分割线
      self.automaticallyAdjustsScrollViewInsets = NO; //table填充状态栏20
      [self.view addSubview:self.myTable];
      
-     self.myTable.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, HEIGHT5S(200))];
+     self.myTable.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, HEIGHT5S(180))];
      [self.myTable addSubview:self.myTable.tableHeaderView];
      
      [self createControl];
@@ -46,23 +49,27 @@
 //创建控件
 - (void)createControl{
      
-     self.bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH5S(320), HEIGHT5S(200))];
-     self.bgView.backgroundColor = [UIColor grayColor];
+     self.bgView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, WIDTH5S(320), HEIGHT5S(180))];
+     self.bgView.backgroundColor = COLOR(150, 150, 150, 1);
      [self.myTable.tableHeaderView addSubview:self.bgView];
      
-     self.userHeadImage = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(120), HEIGHT5S(60), WIDTH5S(80), HEIGHT5S(80))];
-     self.userHeadImage.image = IMAGE(@"1.1.jpg");
+     self.bgImage = [[UIImageView alloc]initWithFrame:self.bgView.bounds];
+     self.bgImage.image = IMAGE(@"bg.jpg");
+     [self.bgView addSubview:self.bgImage];
+     
+     self.userHeadImage = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(120), HEIGHT5S(40), WIDTH5S(80), HEIGHT5S(80))];
+     self.userHeadImage.image = IMAGE(@"1.2.jpg");
      self.userHeadImage.layer.cornerRadius = 40;
      self.userHeadImage.layer.masksToBounds = YES;
      [self.bgView addSubview:self.userHeadImage];
      
-     self.registerBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(115), HEIGHT5S(150), WIDTH5S(40), HEIGHT5S(30))];
+     self.registerBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(115), HEIGHT5S(130), WIDTH5S(40), HEIGHT5S(30))];
      [self.registerBtn setTitle:@"登录" forState:UIControlStateNormal];
      [self.registerBtn setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
      [self.bgView addSubview:self.registerBtn];
      [self.registerBtn addTarget:self action:@selector(LogIn) forControlEvents:UIControlEventTouchUpInside];
      
-     self.logInBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(165), HEIGHT5S(150), WIDTH5S(40), HEIGHT5S(30))];
+     self.logInBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(165), HEIGHT5S(130), WIDTH5S(40), HEIGHT5S(30))];
      [self.logInBtn setTitle:@"注册" forState:UIControlStateNormal];
      [self.logInBtn setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
      [self.bgView addSubview:self.logInBtn];
@@ -90,12 +97,8 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-     if (section == 0) {
-          return 20;
-     }else{
-          return 0.1+5;
-     }
      
+     return 16;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -124,8 +127,22 @@
      NSArray *arr = @[@"我的收藏", @"我的消息",@"我的贴子", @"我的订单", @"我的购物车", @"意见反馈", @"设置"];
      
      UILabel *textLab = [[UILabel alloc]initWithFrame:CGRectMake(52, 10, WIDTH5S(100), HEIGHT5S(22))];
-     
      [cell addSubview:textLab];
+     
+     //添加分割线
+     if (indexPath.section == 0) {
+          if (indexPath.row == 4) {
+               
+          }
+     }else{
+          
+          UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(43), WIDTH5S(290), HEIGHT5S(1))];
+          line.backgroundColor = COLOR(228, 228, 228, 1);
+          [cell addSubview:line];
+     }
+     
+     
+     //定义标题
      if (indexPath.section == 0) {
           textLab.text = arr[indexPath.row];
      }else{
@@ -137,14 +154,15 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
      
-     //     [newsServerceViewController newsServerce1:^(NSDictionary *dic) {
-     //
-     //          NSLog(@"%@",dic);
-     //     }];
+     [tableView deselectRowAtIndexPath:indexPath animated:YES];
      
+     //跳转页面
      if (indexPath.section==0) {
           
           if (indexPath.row==0) {
+               
+               MyCollectViewController *mcv = [[MyCollectViewController alloc]init];
+               [self.navigationController pushViewController:mcv animated:YES];
                
           }else if (indexPath.row == 1){
                
@@ -152,6 +170,9 @@
                [self.navigationController pushViewController:ner animated:YES];
                
           }else if (indexPath.row == 2){
+               
+               MyPostViewController *mpv = [[MyPostViewController alloc]init];
+               [self.navigationController pushViewController:mpv animated:YES];
                
           }else if (indexPath.row == 3){
                

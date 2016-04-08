@@ -35,6 +35,11 @@
 #define UMQQAPPID   @"1105298878"
 #define UMQQAPPKEY  @"VLnznqZtTNwpSqUj"
 
+//短信验证
+#import <SMS_SDK/SMSSDK.h>
+#define APPKEY @"116b5a6969922"
+#define APPSECRET @"e4d1fa65ad52de52d22a9749b27d6421"
+
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
 #define WIDTH5S(x) x/320.0*[UIScreen mainScreen].bounds.size.width
