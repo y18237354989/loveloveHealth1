@@ -14,6 +14,10 @@
 
 @implementation nearlistViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+     self.navigationController.navigationBar.hidden = NO;
+}
+
 -(id)init{
     
     self=[super init];

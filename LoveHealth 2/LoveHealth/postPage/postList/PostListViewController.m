@@ -43,6 +43,10 @@
      [rightItem setTintColor:COLOR(255, 255, 255, 1)];
      self.navigationItem.rightBarButtonItem = rightItem;
      
+     UIBarButtonItem *leftItem = [[UIBarButtonItem alloc]initWithTitle:@"标签" style:UIBarButtonItemStylePlain target:self action:@selector(selectTag)];
+     [rightItem setTintColor:COLOR(255, 255, 255, 1)];
+     self.navigationItem.leftBarButtonItem = leftItem;
+     
      self.postTable = [[UITableView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(0), SCREEN_WIDTH, HEIGHT5S(568)) style:UITableViewStylePlain];
      self.postTable.dataSource = self;
      self.postTable.delegate = self;
@@ -143,6 +147,11 @@
      SendPostViewController *spv = [[SendPostViewController alloc]init];
      spv.hidesBottomBarWhenPushed = YES;
      [self.navigationController pushViewController:spv animated:YES];
+}
+
+//选择标签
+- (void)selectTag{
+     
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

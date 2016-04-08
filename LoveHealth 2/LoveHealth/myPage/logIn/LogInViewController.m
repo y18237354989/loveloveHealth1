@@ -7,16 +7,136 @@
 //
 
 #import "LogInViewController.h"
+#import "Header.h"
+#import "LogInServerceViewController.h"
+#import "RegisterViewController.h"
+#import "MyPageListViewController.h"
 
-@interface LogInViewController ()
+@interface LogInViewController ()<UITextFieldDelegate>
 
 @end
 
 @implementation LogInViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+     
+     self.navigationController.navigationBar.hidden = NO;
+}
+
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+     [super viewDidLoad];
+     self.view.backgroundColor = COLOR(255, 255, 255, 1);
+     [self createControl];
+}
+
+//创建控件
+- (void)createControl{
+     
+     self.picView = [[UIView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(64), SCREEN_WIDTH, HEIGHT5S(80))];
+     self.picView.backgroundColor = COLOR(228, 228, 228, 1);
+     [self.view addSubview:self.picView];
+     
+     self.userNumberLogo = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(154), WIDTH5S(20), HEIGHT5S(20))];
+     self.userNumberLogo.image = IMAGE(@"me@2x");
+     [self.view addSubview:self.userNumberLogo];
+     
+     self.userNumberText = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(45), HEIGHT5S(154), WIDTH5S(260), HEIGHT5S(20))];
+     self.userNumberText.placeholder = @"你的手机号";
+     self.userNumberText.keyboardType = UIKeyboardTypeNamePhonePad;
+     self.userNumberText.tag = 1001;
+     self.userNumberText.delegate = self;
+     [self.view addSubview:self.userNumberText];
+     
+     self.passwordLogo = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(194), WIDTH5S(20), HEIGHT5S(20))];
+     self.passwordLogo.image = IMAGE(@"1.1.jpg");
+     [self.view addSubview:self.passwordLogo];
+     
+     self.passwordText = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(45), HEIGHT5S(194), WIDTH5S(260), HEIGHT5S(20))];
+     self.passwordText.placeholder = @"请输入密码";
+     self.passwordText.keyboardType = UIKeyboardTypeDefault;
+     self.passwordText.tag = 1002;
+     self.passwordText.delegate = self;
+     [self.view addSubview:self.passwordText];
+     
+     self.userNumLine = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(183), WIDTH5S(290), HEIGHT5S(1))];
+     self.userNumLine.backgroundColor = COLOR(228, 228, 228, 1);
+     [self.view addSubview:self.userNumLine];
+     
+     self.passwordLine = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(223), WIDTH5S(290), HEIGHT5S(1))];
+     self.passwordLine.backgroundColor = COLOR(228, 228, 228, 1);
+     [self.view addSubview:self.passwordLine];
+     
+     self.registerBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(234), WIDTH5S(140), HEIGHT5S(30))];
+     [self.registerBtn setTitle:@"注册账号" forState:UIControlStateNormal];
+     [self.registerBtn setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateNormal];
+     self.registerBtn.layer.borderWidth = 1;
+     self.registerBtn.layer.borderColor = COLOR(0, 210, 210, 1).CGColor;
+     self.registerBtn.layer.cornerRadius = 3;
+     self.registerBtn.layer.masksToBounds =YES;
+     [self.view addSubview:self.registerBtn];
+     
+     self.logInBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(165), HEIGHT5S(234), WIDTH5S(140), HEIGHT5S(30))];
+     [self.logInBtn setTitle:@"登录" forState:UIControlStateNormal];
+     [self.logInBtn setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
+     self.logInBtn.backgroundColor = COLOR(100, 210, 210, 1);
+     self.logInBtn.layer.cornerRadius = 3;
+     self.logInBtn.layer.masksToBounds =YES;
+     [self.view addSubview:self.logInBtn];
+     
+     
+     [self.registerBtn addTarget:self action:@selector(goToRegister) forControlEvents:UIControlEventTouchUpInside];
+     [self.logInBtn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
+}
+//去注册
+- (void)goToRegister{
+    
+     RegisterViewController *rvc = [[RegisterViewController alloc]init];
+     [self.navigationController pushViewController:rvc animated:YES];
+}
+//登录
+- (void)logIn{
+     
+     NSMutableDictionary *dics = [NSMutableDictionary dictionaryWithCapacity:0];
+     [dics setObject:self.userNumberText.text forKey:@"tel"];
+     [dics setObject:self.passwordText.text forKey:@"pwd"];
+     
+     [LogInServerceViewController logInUser:dics and:^(NSMutableDictionary *dic) {
+          
+          if (dic == nil) {
+               NSLog(@"logIn file");
+          }else{
+               
+               [self.navigationController popViewControllerAnimated:YES];
+          }
+     }];
+     
+}
+
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+     
+     if (textField.tag == 1001) {
+          self.userNumLine.backgroundColor = COLOR(0, 210, 210, 1);
+          self.passwordLine.backgroundColor = COLOR(228, 228, 228, 1);
+          
+     }else if (textField.tag == 1002){
+          self.passwordLine.backgroundColor = COLOR(0, 210, 210, 1);
+          self.userNumLine.backgroundColor = COLOR(228, 228, 228, 1);
+     }
+     
+     return YES;
+}
+
+- (BOOL)textFieldShouldEndEditing:(UITextField *)textField{
+     
+     self.userNumLine.backgroundColor = COLOR(228, 228, 228, 1);
+     self.passwordLine.backgroundColor = COLOR(228, 228, 228, 1);
+     return YES;
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+     
+     [self.view endEditing:YES];
+     
 }
 
 - (void)didReceiveMemoryWarning {

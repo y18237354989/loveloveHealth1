@@ -14,4 +14,10 @@
 
 @property (strong, nonatomic)UITableView *myTable;
 
+@property (strong, nonatomic)UIImageView *userHeadImage;  //用户头像
+
+@property (strong, nonatomic)UIButton *registerBtn;  //注册
+
+@property (strong, nonatomic)UIButton *logInBtn;  //登录
+
 @end
