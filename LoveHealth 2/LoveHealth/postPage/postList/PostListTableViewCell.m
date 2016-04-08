@@ -150,16 +150,31 @@
      self.line.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(109), WIDTH5S(290), HEIGHT5S(1));
      
      //有图时
-      self.postTitle1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(50), WIDTH5S(165), HEIGHT5S(18));
-     self.tagLabel1.frame = CGRectMake(15, HEIGHT5S(102), WIDTH5S(30), HEIGHT5S(18));
-     self.commentImg1.frame = CGRectMake(WIDTH5S(219), HEIGHT5S(102), WIDTH5S(18), HEIGHT5S(18));
-     self.comNum1.frame = CGRectMake(WIDTH5S(179), HEIGHT5S(102), WIDTH5S(35), HEIGHT5S(18));
-     self.collectImg1.frame = CGRectMake(WIDTH5S(287), HEIGHT5S(102), WIDTH5S(18), HEIGHT5S(18));
-     self.colNum1.frame = CGRectMake(WIDTH5S(247), HEIGHT5S(102), WIDTH5S(35), HEIGHT5S(15));
-     self.line1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(129), WIDTH5S(290), HEIGHT5S(1));
-     self.img.frame = CGRectMake(WIDTH5S(245), HEIGHT5S(50), WIDTH5S(60), HEIGHT5S(40));
+      self.postTitle1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(50), WIDTH5S(220), HEIGHT5S(20));
+     self.img.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(80), WIDTH5S(290), HEIGHT5S(150));
+     self.tagLabel1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(242), WIDTH5S(30), HEIGHT5S(18));
+     self.commentImg1.frame = CGRectMake(WIDTH5S(219), HEIGHT5S(242), WIDTH5S(18), HEIGHT5S(18));
+     self.comNum1.frame = CGRectMake(WIDTH5S(179), HEIGHT5S(242), WIDTH5S(35), HEIGHT5S(18));
+     self.collectImg1.frame = CGRectMake(WIDTH5S(287), HEIGHT5S(242), WIDTH5S(18), HEIGHT5S(18));
+     self.colNum1.frame = CGRectMake(WIDTH5S(247), HEIGHT5S(242), WIDTH5S(35), HEIGHT5S(15));
+     self.line1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(269), WIDTH5S(290), HEIGHT5S(1));
+     
      
 }
 
+//label自适高
+//- (void)setupLabel:(NSString *)title{
+//     
+//     self.postTitle1.text = title;
+//     
+//     self.postTitle1.font = FONT(15);
+//     self.postTitle1.numberOfLines = 0;
+//     self.postTitle1.lineBreakMode = NSLineBreakByTruncatingTail;
+//     //labelsize的最大值
+//     CGSize maximumLabelSize = CGSizeMake(WIDTH5S(220), 9999);
+//     //关键语句
+//     CGSize expectSize = [self.postTitle1 sizeThatFits:maximumLabelSize];
+//     self.h = expectSize.height;
+//}
 
 @end

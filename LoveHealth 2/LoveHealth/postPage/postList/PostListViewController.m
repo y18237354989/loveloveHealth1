@@ -166,7 +166,7 @@
      if (self.picArr.count == 0) {
           h = 80;
      }else if (self.picArr.count > 0){
-          h = 130;
+          h = 270;
      }
      
      return h;
@@ -202,6 +202,8 @@
           cell.userName.text = @"iphone";
           cell.tagLabel1.text = @"养生";
           cell.postTitle1.text = [self.result[indexPath.row] objectForKey:@"post_title"];
+          //调用label自适高方法
+//          [cell setupLabel:[self.result[indexPath.row] objectForKey:@"post_title"]];
           cell.date.text = [self.result[indexPath.row] objectForKey:@"post_time"];
           cell.commentImg1.image = IMAGE(@"talk");
           cell.comNum1.text = @"9999";

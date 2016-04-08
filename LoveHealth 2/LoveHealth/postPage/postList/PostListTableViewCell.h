@@ -35,5 +35,9 @@
 @property (strong, nonatomic)UILabel *line1;  //分割线
 @property (strong, nonatomic)UIImageView *img;
 
+@property (assign, nonatomic)double h; //title Label高
+
+//label自适高
+- (void)setupLabel:(NSString *)title;
 
 @end

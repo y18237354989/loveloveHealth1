@@ -14,7 +14,6 @@
 #import "MyPageListViewController.h"
 #import "Header.h"
 #import <RongIMKit/RongIMKit.h>
-#import <SMS_SDK/SMSSDK.h>
 
 @interface AppDelegate ()<RCIMUserInfoDataSource,RCIMGroupInfoDataSource,QQApiInterfaceDelegate>
 

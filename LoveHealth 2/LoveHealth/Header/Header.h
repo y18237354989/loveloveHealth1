@@ -37,8 +37,8 @@
 
 //短信验证
 #import <SMS_SDK/SMSSDK.h>
-#define APPKEY @"116b5a6969922"
-#define APPSECRET @"e4d1fa65ad52de52d22a9749b27d6421"
+#define APPKEY @"1069831ba9d45"
+#define APPSECRET @"b0ed9fe1032f098f0e2801746496e1e5"
 
 #define SCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
 #define SCREEN_HEIGHT [UIScreen mainScreen].bounds.size.height
@@ -48,6 +48,6 @@
 #define FONT(f) [UIFont systemFontOfSize:f]
 #define IMAGE(name) [UIImage imageNamed:name]
 
-#define APPKEY @"41801ee08ae0867389dcd7d455363123"
+//#define APPKEY @"41801ee08ae0867389dcd7d455363123"
 
 #endif /* Header_h */
