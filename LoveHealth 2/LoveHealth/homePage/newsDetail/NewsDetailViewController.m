@@ -23,7 +23,7 @@
 @property (strong, nonatomic) UIFont *font;
 @property (strong, nonatomic) myNavigation * navigation;
 @property (strong, nonatomic) UIView *commentView;
-@property (assign, nonatomic) double  f;
+@property (assign, nonatomic) double  f; //评论内容label高
 @property (strong, nonatomic) UITextField *text1;
 @property (strong, nonatomic) UIView *view1;
 @property (strong, nonatomic) UITableView *tableview;

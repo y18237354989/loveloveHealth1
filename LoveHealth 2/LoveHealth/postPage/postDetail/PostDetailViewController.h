@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+
+
 @interface PostDetailViewController : UIViewController
 
 //tableHeadView上
@@ -25,7 +27,7 @@
 
 @property (strong, nonatomic)UIImageView *img;
 
-@property (strong, nonatomic)UILabel *postText;  //帖子内容
+@property (strong, nonatomic)UITextView *postText;  //帖子内容
 
 //table上（评论）
 @property (strong, nonatomic)UITableView *postDetailTable;

@@ -29,7 +29,6 @@
         NSDictionary *dic1 = responseObject;
         
         NSDictionary *dics = [dic1 objectForKey:@"result"];
-        NSLog(@"%@",dics);
         success(dics);
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -50,7 +49,7 @@
         NSDictionary *dic1 = responseObject;
 
         success(dic1);
-        
+         NSLog(@"%@",dic1);
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];

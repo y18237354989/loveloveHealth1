@@ -19,6 +19,6 @@
 @property (strong, nonatomic) UILabel     *timelable;
 @property (assign, nonatomic) double      d;
 
-//-(void)setIntroductionText:(NSString *)text;
+-(void)setIntroductionText:(NSString *)text;
 
 @end

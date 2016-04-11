@@ -61,7 +61,7 @@
      self.i=0;
      self.tmpBtn = nil;
      self.navigation=[[myNavigation alloc]initWithBgImg:nil andTitleLabel:@"sh" andTitleImg:nil andleftBtn:@"返回" andRightBtn:@"分享"];
-     self.arr = @[@"1.0.jpg"];
+     self.arr = @[@"1.2.jpg"];
      
     [self.newsTypeArr addObject:@"推荐"];
     [self.newsTypeArr addObject:@"健康"];

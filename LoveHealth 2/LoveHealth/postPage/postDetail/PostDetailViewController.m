@@ -11,12 +11,32 @@
 #import "Header.h"
 #import "PostServerce.h"
 #import "MJRefresh.h"
+#import "PostCommentServerceViewController.h"
+#import "CommentTableViewCell.h"
+#import "ResendViewController.h"
 
 @interface PostDetailViewController ()<UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,UMSocialUIDelegate>
 
 @property (strong, nonatomic)myNavigation * navigation;
 
-@property (strong,nonatomic)NSDictionary *dic;
+@property (strong,nonatomic)NSDictionary *dic;//帖子详情
+
+@property (strong,nonatomic)NSDictionary *dic1; //评论内容
+
+@property (strong,nonatomic)NSMutableArray *commentCountArr;//评论个数
+
+@property (assign,nonatomic)double height; // cell高度
+
+@property (assign,nonatomic)long int a;
+
+@property (strong,nonatomic)NSString *dateStr;
+
+//button的tag
+@property (assign, nonatomic)long int number;
+//接收评论回复总条数
+@property (copy, nonatomic)NSString *replyNumber;
+//评论返回条数匹配
+@property (assign, nonatomic)long int commentID;
 
 @end
 
@@ -24,9 +44,11 @@
 
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    NSLog(@"dic--->%@",_dic);
+     [super viewDidLoad];
+     
+     self.commentCountArr = [NSMutableArray arrayWithCapacity:0];
+     
+     self.a=0;
      //使用自定义导航栏
      self.navigationController.navigationBar.hidden = YES;
      self.navigation=[[myNavigation alloc]initWithBgImg:nil andTitleLabel:@"热帖详情" andTitleImg:nil andleftBtn:@"back_48px_1125197_easyicon.net.png" andRightBtn:@"share_48px_1182213_easyicon.net"];
@@ -36,36 +58,81 @@
      self.navigation.backgroundColor=COLOR(0, 210, 210, 1);
      [self.view addSubview:self.navigation];
      
-     self.postDetailTable = [[UITableView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(64), SCREEN_WIDTH, HEIGHT5S(504)) style:UITableViewStylePlain];
+     self.postDetailTable = [[UITableView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(64), SCREEN_WIDTH, HEIGHT5S(456)) style:UITableViewStylePlain];
      self.postDetailTable.dataSource = self;
      self.postDetailTable.delegate = self;
+     self.postDetailTable.tableFooterView = [[UIView alloc]init];
      [self.view addSubview:self.postDetailTable];
      
-     [self createTableHead];
-     [self createCommentView];
-    [self DropDownRefresh];
+     //获取帖子详情（请求数据）
+     [self requestdetail];
+     // 获取评论内容（请求数据）
+     [self requestdata];
+     
+     
+     //获取当前时间
+     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc]init];
+     [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+     
+     self.dateStr = [dateFormatter stringFromDate:[NSDate date]];
+     
+     [self DownFresh];
+     
+     //开启键盘位置监听
+     [self regNotification];
 }
-//下拉刷新
--(void)DropDownRefresh{
-    NSDictionary *dic = @{@"postid":_str};
-    [PostServerce getPostContentWithDic:dic andWith:^(NSDictionary *dics) {
-        NSDictionary *dic1=dics;
-        NSArray *arr=[dic1 objectForKey:@"result"];
-        self.dic =arr[0];
-        [self createTableHead];
-        [self createCommentView];
-    }];
-    
-    self.postDetailTable.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        
-        [self.postDetailTable.mj_header endRefreshing];
-    }];
+
+- (void)requestdetail{
+     
+     NSDictionary *dic = @{@"postid":_str};
+     [PostServerce getPostContentWithDic:dic andWith:^(NSDictionary *dics) {
+          NSDictionary *dic1=dics;
+          NSArray *arr=[dic1 objectForKey:@"result"];
+          self.dic =arr[0];
+          [self createTableHead];
+          [self createCommentView];
+     }];
+     
+}
+
+//请求评论
+- (void)requestdata{
+     
+     [PostCommentServerceViewController postCommentRequerst:_str and:^(NSMutableDictionary *postCommentDic) {
+          
+          self.dic = postCommentDic;
+          NSLog(@"++++++%@",self.dic);
+          if ([[self.dic objectForKey:@"message"] isEqualToString:@"查询失败"]) {
+               NSLog(@"null data");
+               self.a = 0;
+               
+          }else{
+               
+               self.commentCountArr = [self.dic objectForKey:@"result"];
+               self.a   = self.commentCountArr.count;
+               
+          }
+          [self.postDetailTable reloadData];
+     }];
+}
+#pragma mark - 下拉刷新评论
+-(void)DownFresh{
+     
+     self.postDetailTable.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+          [self requestdata];
+          [self.postDetailTable.mj_header endRefreshing];
+          
+     }];
+     
 }
 
 //页面布局(tableHead)
 - (void)createTableHead{
      
-     self.postDetailTable.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, HEIGHT5S(400))];
+     CGRect textSize = [[_dic objectForKey:@"post_text"] boundingRectWithSize:CGSizeMake(WIDTH5S(290), 9999) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:12]} context:nil];
+     
+     self.postDetailTable.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT,textSize.size.height+HEIGHT5S(140)) ];
      [self.postDetailTable addSubview:self.postDetailTable.tableHeaderView];
      
      self.postTitle = [[UILabel alloc]initWithFrame:CGRectMake(15, 10, WIDTH5S(290), HEIGHT5S(20))];
@@ -103,10 +170,13 @@
      self.line.backgroundColor = COLOR(228, 228, 228, 1);
      [self.postDetailTable.tableHeaderView addSubview:self.line];
      
-     self.postText = [[UILabel alloc]initWithFrame:CGRectMake(15, HEIGHT5S(100), WIDTH5S(290), HEIGHT5S(200))];
-     self.postText.font = FONT(15);
-     self.postText.textColor = COLOR(100, 100, 100, 1);
-     self.postText.text = [self.dic objectForKey:@"post_text"];
+     self.postText = [[UITextView alloc]initWithFrame:CGRectMake(15, HEIGHT5S(100), WIDTH5S(290), textSize.size.height+20)];
+     self.postText.text=[_dic objectForKey:@"post_text"];
+     [self.postText setEditable:NO];
+     self.postText.scrollEnabled = YES;
+     self.postText.font=[UIFont systemFontOfSize:12];
+     self.postText.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+     
      [self.postDetailTable.tableHeaderView addSubview:self.postText];
      
 }
@@ -118,14 +188,16 @@
      self.commentView.backgroundColor = COLOR(228, 228, 228, 1);
      [self.view addSubview:self.commentView];
      
-     self.text = [[UITextField alloc]initWithFrame:CGRectMake(15, 10, WIDTH5S(220), HEIGHT5S(28))];
-     self.text.layer.cornerRadius = 14;
+     self.text = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(15), 10, WIDTH5S(220), HEIGHT5S(28))];
+     self.text.backgroundColor = COLOR(255, 255, 255, 1);
+     self.text.layer.cornerRadius = 10;
      self.text.placeholder = @"  评论";
      [self.commentView addSubview:self.text];
      
-     self.send = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(245), 10, WIDTH5S(50), HEIGHT5S(28))];
+     self.send = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(240), 10, WIDTH5S(40), HEIGHT5S(28))];
      [self.send setTitle:@"发送" forState:UIControlStateNormal];
      [self.send setTitleColor:COLOR(150, 150, 150, 1) forState:UIControlStateNormal];
+     [self.send addTarget:self action:@selector(sendComment) forControlEvents:UIControlEventTouchUpInside];
      [self.commentView addSubview:self.send];
      
      self.collect = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(285), HEIGHT5S(14), WIDTH5S(20), HEIGHT5S(20))];
@@ -137,6 +209,61 @@
      
 }
 
+//键盘监听
+- (void)regNotification
+{
+     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
+     
+}
+
+- (void)dealloc
+{
+     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
+}
+
+#pragma mark - notification handler监听键盘y轴改变量(开始编辑)
+- (void)keyboardWillChangeFrame:(NSNotification *)notification
+{
+     
+     NSDictionary *info = [notification userInfo];
+     CGFloat duration = [[info objectForKey:UIKeyboardAnimationDurationUserInfoKey] floatValue];
+     CGRect beginKeyboardRect = [[info objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue];
+     CGRect endKeyboardRect = [[info objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue];
+     
+     CGFloat yOffset = endKeyboardRect.origin.y - beginKeyboardRect.origin.y;
+     CGRect intPutRect = self.commentView.frame;
+     intPutRect.origin.y += yOffset;
+     NSLog(@"----->>%.1f",yOffset);
+     [UIView animateWithDuration:duration animations:^{
+          self.commentView.frame = intPutRect;
+     }];
+}
+
+
+#pragma mark 发送评论
+-(void)sendComment{
+     if ([self.text.text isEqualToString:@""]) {
+          NSLog(@"评论内容不能为空");
+     }else{
+          NSDictionary *dic = @{@"userid":@"1",
+                                @"postid":_str,
+                                @"commentword":self.text.text,
+                                @"commenttime":self.dateStr
+                                };
+          [PostCommentServerceViewController sendCommentWithDic:dic andWith:^(NSDictionary *dics) {
+               //            NSDictionary*newDic = dics;
+               NSLog(@"评论成功");
+               self.text.text = @"";
+          }];
+     }
+     [self.view endEditing:YES];
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event{
+     [self.view endEditing:YES];
+     self.commentView.frame = CGRectMake(0, HEIGHT5S(520), SCREEN_WIDTH, HEIGHT5S(48));
+}
+
 //返回
 - (void)back{
      
@@ -145,7 +272,7 @@
 
 //分享
 - (void)share{
-   
+     
      //分享到微信、朋友圈、新浪微博、QQ、Qzone
      [UMSocialSnsService presentSnsIconSheetView:self
                                           appKey:UMAPPKEY
@@ -153,7 +280,7 @@
                                       shareImage:[UIImage imageNamed:@"icon.png"]
                                  shareToSnsNames:@[UMShareToWechatSession,UMShareToWechatTimeline,UMShareToSina,UMShareToQQ,UMShareToQzone]
                                         delegate:self];
-
+     
      
 }
 
@@ -169,37 +296,52 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-     return 5;
+     return _a;
+     
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
      
-     return 80;
+     return self.height;
      
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
      
-     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"11"];
+     CommentTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"11"];
      
      if (cell == nil) {
-          cell = [[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"11"];
+          cell = [[CommentTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"11"];
      }
+     cell.commentlable.text = [self.commentCountArr[indexPath.row] objectForKey:@"postcomment_word"];
+     cell.timelable.text = [self.commentCountArr[indexPath.row] objectForKey:@"postcomment_time"];
+     [cell setIntroductionText:cell.commentlable.text];
+     self.height = cell.frame.size.height;
+     cell.buttons.tag = indexPath.row +100;
+     [cell.buttons addTarget:self action:@selector(reComment:) forControlEvents:UIControlEventTouchUpInside];
      
      return cell;
 }
 
+//回复
+- (void)reComment:(UIButton *)sender{
+     
+     ResendViewController *rvc = [[ResendViewController alloc]init];
+     rvc.commentId = [self.commentCountArr[sender.tag -100] objectForKey:@"postcomment_id"];
+     NSLog(@"%@",rvc.commentId);
+   
+     
+     [self.navigationController pushViewController:rvc animated:YES];
+}
+
+//协议方法
+- (void)printText:(NSString *)str{
+     
+     self.replyNumber = str;
+     [self.postDetailTable reloadData];
+}
+
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    
+     [super didReceiveMemoryWarning];
+     
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

@@ -17,10 +17,13 @@
 
 @interface PostListViewController ()<UITableViewDataSource,UITableViewDelegate>
 
-@property (strong,nonatomic)NSArray *result;
+@property (strong,nonatomic)NSMutableArray *result;
 
 @property (assign,nonatomic)long int i;
 
+@property (assign, nonatomic)int n;
+
+@property (assign, nonatomic)long a, b;
 @end
 
 @implementation PostListViewController
@@ -32,12 +35,13 @@
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
+     [super viewDidLoad];
      //设置导航栏标题字体大小和颜色
+     
      [self.navigationController.navigationBar setTitleTextAttributes:
       @{NSFontAttributeName:FONT(18),
         NSForegroundColorAttributeName:COLOR(255, 255, 255, 1)}];
-    self.view.backgroundColor = [UIColor blueColor];
+     self.view.backgroundColor = [UIColor blueColor];
      
      UIBarButtonItem *rightItem = [[UIBarButtonItem alloc]initWithTitle:@"发帖" style:UIBarButtonItemStylePlain target:self action:@selector(sendPost)];
      [rightItem setTintColor:COLOR(255, 255, 255, 1)];
@@ -53,92 +57,103 @@
      self.postTable.separatorStyle = NO;  //隐藏cell自带的分割线
      [self.view addSubview:self.postTable];
      
+     self.result = [NSMutableArray arrayWithCapacity:0];
      self.picArr = [NSMutableArray arrayWithCapacity:0];
      [self.picArr addObject:@"1.1.jpg"];
-    
-    //判断请求数据是否为空
-    if (self.result == nil) {
-        self.i =0;
-    }else{
-        if (self.result.count<5) {
-            self.i = self.result.count;
-        }else{
-            self.i = 5;
-        }
-    }
-   
-    
-    NSDictionary *dic =@{@"postType":@"1",
-                         @"pageindex":@"1"
-                         };
-    [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
-        NSDictionary *newdic1 = dics;
-        self.result = [newdic1 objectForKey:@"result"];
-        NSLog(@"%@",self.result);
-    }];
-    //下拉刷新
-    [self DropDownRefresh];
-    //上拉刷新
-    [self PullRefresh];
+     
+     self.n = 1;
+     
+     [self getpostdata];
+     //下拉刷新
+//     [self DropDownRefresh];
+     //上拉刷新
+     [self PullRefresh];
 
 }
-//下拉刷新
--(void)DropDownRefresh{
-    self.postTable.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        NSDictionary *dic =@{@"postType":@"1",
-                             @"pageindex":@"1"
-                             };
-        [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
-            NSDictionary *newdic1 = dics;
-            self.result = [newdic1 objectForKey:@"result"];
-            NSLog(@"%@",self.result);
-            [self.postTable reloadData];
-            
-            self.i = self.i + 3;
-            [self.postTable reloadData];
-            [self.postTable.mj_header endRefreshing];
-            if (self.result == nil) {
-                self.i=0;
-                [self.postTable.mj_header endRefreshing];
-            }else{
-                if (self.i>self.result.count) {
+
+//请求数据
+-(void)getpostdata{
+     
+     
+     NSString *str  = [NSString stringWithFormat:@"%d",self.n];
+     NSDictionary *dic =@{@"postType":@"1",
+                          @"pageindex":str
+                          };
+     [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
+          
+          
+          if ([[dics objectForKey:@"message"]isEqualToString:@"查询失败"] ) {
+               self.a=1;
+               if (self.result == nil) {
+                    self.i = 0;
+               }
+               
+          }else{
+               if ([[dics objectForKey:@"message"]isEqualToString:@"查询成功"]) {
+                    self.a = 0;
+                    NSMutableArray *arr = [dics objectForKey:@"result"];
+                    [self.result addObjectsFromArray:arr];
+
                     self.i = _result.count;
+                    
                     [self.postTable reloadData];
-                    [self.postTable.mj_header endRefreshing];
-                }
-            }
-            
-        }];
-    }];
+                    
+               }
+          }
+     }];
 }
+
+
+//下拉刷新
+//-(void)DropDownRefresh{
+//     self.postTable.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+//          self.n++;
+//          [self getpostdata];
+//          [self.postTable.mj_footer endRefreshing];
+
+          
+          
+//          NSString *str  = [NSString stringWithFormat:@"%d",self.n];
+//          NSDictionary *dic =@{@"postType":@"1",
+//                                         @"pageindex":str
+//                                         };
+//          [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
+//               NSDictionary *newdic1 = dics;
+//               self.result = [newdic1 objectForKey:@"result"];
+//               NSLog(@"%@",self.result);
+//               [self.postTable reloadData];
+//               
+//               self.i = self.i + 3;
+//               [self.postTable reloadData];
+//               [self.postTable.mj_header endRefreshing];
+//               if (self.result == nil) {
+//                    self.i=0;
+//                    [self.postTable.mj_header endRefreshing];
+//               }else{
+//                    if (self.i>self.result.count) {
+//                         self.i = _result.count;
+//                         [self.postTable reloadData];
+//                         [self.postTable.mj_header endRefreshing];
+//                    }
+//               }
+//               
+//          }];
+//     }];
+//}
 //上拉刷新
 -(void)PullRefresh{
-    self.postTable.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
-        
-        NSDictionary *dic =@{@"postType":@"1",
-                             @"pageindex":@"1"
-                             };
-        [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
-            NSDictionary *newdic1 = dics;
-            self.result = [newdic1 objectForKey:@"result"];
-            NSLog(@"%@",self.result);
-            
-            self.i = self.i + 3;
-            [self.postTable reloadData];
-            [self.postTable.mj_footer endRefreshing];
-            if (self.result == nil) {
-                self.i = 0;
-            }else{
-                if (self.i>self.result.count) {
-                    self.i = _result.count;
-                    [self.postTable reloadData];
-                    [self.postTable.mj_footer endRefreshingWithNoMoreData];
-                    self.postTable.mj_footer.hidden = YES;
-                }
-            }
-            
-        }];
-    }];
+     self.postTable.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
+     
+          self.n++;
+          [self getpostdata];
+          [self.postTable.mj_footer endRefreshing];
+          
+          if (self.a == 1) {
+               [self.postTable.mj_footer endRefreshingWithNoMoreData];
+               self.postTable.mj_footer.hidden = YES;
+          }
+          
+     }];
 }
 
 //发帖
@@ -176,10 +191,9 @@
      
      static NSString *Identifier;
      
-     PostListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
-     
      if (self.picArr.count == 0) {
           Identifier = @"nilPic";
+          PostListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
           if (cell == nil) {
                cell = [[PostListTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier];
           }
@@ -192,9 +206,12 @@
           cell.comNum.text = @"9999";
           cell.collectImg.image = IMAGE(@"star");
           cell.colNum.text = @"998";
-     }else if (self.picArr.count > 0){
+          
+          return cell;
+     }else{
           
           Identifier = @"havePic";
+          PostListTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:Identifier];
           if (cell == nil) {
                cell = [[PostListTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:Identifier];
           }
@@ -203,16 +220,16 @@
           cell.tagLabel1.text = @"养生";
           cell.postTitle1.text = [self.result[indexPath.row] objectForKey:@"post_title"];
           //调用label自适高方法
-//          [cell setupLabel:[self.result[indexPath.row] objectForKey:@"post_title"]];
+          //          [cell setupLabel:[self.result[indexPath.row] objectForKey:@"post_title"]];
           cell.date.text = [self.result[indexPath.row] objectForKey:@"post_time"];
           cell.commentImg1.image = IMAGE(@"talk");
           cell.comNum1.text = @"9999";
           cell.collectImg1.image = IMAGE(@"star");
           cell.colNum1.text = @"998";
           cell.img.image = IMAGE(self.picArr[0]);
+          return cell;
      }
      
-     return cell;
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(nonnull NSIndexPath *)indexPath{
@@ -227,8 +244,8 @@
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    
+     [super didReceiveMemoryWarning];
+     
 }
 
 
