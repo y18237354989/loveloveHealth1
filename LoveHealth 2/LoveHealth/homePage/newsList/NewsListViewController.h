@@ -18,14 +18,12 @@
 
 
 @property (strong, nonatomic)UITableView *newsListTable;
-//标题View
-@property (strong, nonatomic)UIView *titleView;
+
 //标题scroll
 @property (strong, nonatomic)UIScrollView *titleScroll;
 //图片主题scroll
 @property (strong, nonatomic)UIScrollView *imageScroll;
-//新闻分类页面scroll
-@property (strong, nonatomic)UIScrollView *newsScroll;
+
 //新闻分类数组
 @property (strong, nonatomic)NSMutableArray *newsTypeArr;
 

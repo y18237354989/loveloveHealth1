@@ -18,4 +18,6 @@
 
 @property(strong,nonatomic)NSArray *imgarr;
 
+@property (copy, nonatomic)NSString *newsid;
+
 @end

@@ -36,6 +36,8 @@
 
 @property (strong,nonatomic)NSString *dateStr;
 
+@property (copy, nonatomic)NSString *type;
+
 @end
 
 @implementation SendPostViewController
@@ -232,18 +234,21 @@
 
 //发帖方法
 -(void)sendPostNew{
+     NSUserDefaults *user=[NSUserDefaults standardUserDefaults];
      
-     if ([self.titleText.text isEqualToString:@""]||[self.contentView.text isEqualToString:@""]) {
+     NSString *userid=[[user objectForKey:@"usermessage"] objectForKey:@"user_id"];
+     
+     if ([self.titleText.text isEqualToString:@""]||[self.contentView.text isEqualToString:@""]||(self.type == nil)) {
           NSLog(@"标题或内容为空");
      }else{
           
-          NSDictionary *dic = @{@"userid":@"1",
-                                @"postTypeid":@"1",
+          NSDictionary *dic = @{@"userid":userid,
+                                @"postTypeid":self.type,
                                 @"postTitle":self.titleText.text,
                                 @"postword":self.contentView.text,
                                 @"posttime":self.dateStr,
                                 @"postimage":@""};
-          
+          NSLog(@"%@",self.type);
           [PostServerce sendPostWithDic:dic andWith:^(NSDictionary *dics) {
                
                NSDictionary *newdic = dics;
@@ -260,8 +265,7 @@
 //标签菜单
 - (void)ChooseMark:(UIButton *)sender{
      
-     //    ChooseMarkViewController *cvc = [[ChooseMarkViewController alloc]init];
-     //    [self.navigationController pushViewController:cvc animated:YES];
+     
      // 显示默认样式的Menu
      if ([sender isKindOfClass:[UIButton class]]) {
           UIButton *btn = sender;
@@ -271,11 +275,13 @@
           [YCXMenu setTitleFont:[UIFont systemFontOfSize:15.0]];
           [YCXMenu showMenuInView:self.view fromRect:btn.frame menuItems:self.items selected:^(NSInteger index, YCXMenuItem *item) {
                NSLog(@"%@",item);
+               self.type = [NSString stringWithFormat:@"%ld",(index+1)];
+               
           }];
      }
 }
 
-#pragma mark - setter/getter
+#pragma mark - setter/getter(标签菜单)
 - (NSMutableArray *)items {
      if (!_items) {
           
@@ -284,38 +290,33 @@
           menuTitle.foreColor = [UIColor whiteColor];
           menuTitle.titleFont = [UIFont boldSystemFontOfSize:15.0f];
           
-          //          //set logout button
-          //          YCXMenuItem *logoutItem = [YCXMenuItem menuItem:@"Logout" image:nil target:self action:@selector(logout:)];
-          //          logoutItem.foreColor = [UIColor redColor];
-          //          logoutItem.alignment = NSTextAlignmentCenter;
-          
-          
           //set item
-          _items = [@[
-                      //                      menuTitle,
-                      [YCXMenuItem menuItem:@"中医"
-                                      image:nil
-                                        tag:100
-                                   userInfo:@{@"title":@"Menu"}],
-                      [YCXMenuItem menuItem:@"西医"
+          _items = [@ [
+                      // menuTitle,
+                      [YCXMenuItem menuItem:@"健身"
                                       image:nil
                                         tag:101
                                    userInfo:@{@"title":@"Menu"}],
-                      [YCXMenuItem menuItem:@"健身"
+                      [YCXMenuItem menuItem:@"心理"
                                       image:nil
                                         tag:102
                                    userInfo:@{@"title":@"Menu"}],
-                      [YCXMenuItem menuItem:@"心理"
+                      [YCXMenuItem menuItem:@"中医"
                                       image:nil
                                         tag:103
                                    userInfo:@{@"title":@"Menu"}],
-                      [YCXMenuItem menuItem:@"饮食"
+                      [YCXMenuItem menuItem:@"西医"
                                       image:nil
                                         tag:104
+                                   userInfo:@{@"title":@"Menu"}],
+                      [YCXMenuItem menuItem:@"饮食"
+                                      image:nil
+                                        tag:105
                                    userInfo:@{@"title":@"Menu"}]
                       //  logoutItem
                       ] mutableCopy];
      }
+     
      return _items;
 }
 

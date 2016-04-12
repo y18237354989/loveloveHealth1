@@ -15,6 +15,11 @@
 
 @implementation MyPostViewController
 
+- (void)viewWillAppear:(BOOL)animated{
+     
+     self.navigationController.navigationBar.hidden = NO;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
      self.view.backgroundColor = COLOR(242, 242, 242, 1);

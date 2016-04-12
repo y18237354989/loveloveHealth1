@@ -19,18 +19,18 @@
 //无图
 @property (strong, nonatomic)UILabel *postTitle;
 @property (strong, nonatomic)UILabel *tagLabel;  //标签
-@property (strong, nonatomic)UIImageView *commentImg;
+@property (strong, nonatomic)UIButton *comment;
 @property (strong, nonatomic)UILabel *comNum;  //评论数
-@property (strong, nonatomic)UIImageView *collectImg;
+@property (strong, nonatomic)UIButton *collect;
 @property (strong, nonatomic)UILabel *colNum;  //收藏数
 @property (strong, nonatomic)UILabel *line;  //分割线
 
 //一图
 @property (strong, nonatomic)UILabel *postTitle1;
 @property (strong, nonatomic)UILabel *tagLabel1;  //标签
-@property (strong, nonatomic)UIImageView *commentImg1;
+@property (strong, nonatomic)UIButton *comment1;
 @property (strong, nonatomic)UILabel *comNum1;  //评论数
-@property (strong, nonatomic)UIImageView *collectImg1;
+@property (strong, nonatomic)UIButton *collect1;
 @property (strong, nonatomic)UILabel *colNum1;  //收藏数
 @property (strong, nonatomic)UILabel *line1;  //分割线
 @property (strong, nonatomic)UIImageView *img;
@@ -38,6 +38,6 @@
 @property (assign, nonatomic)double h; //title Label高
 
 //label自适高
-- (void)setupLabel:(NSString *)title;
+//- (void)setupLabel:(NSString *)title;
 
 @end

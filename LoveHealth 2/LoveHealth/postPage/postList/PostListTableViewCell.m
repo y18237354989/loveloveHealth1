@@ -57,20 +57,22 @@
                self.tagLabel.textAlignment = 1; //文字居中
                [self.contentView addSubview:self.tagLabel];
                
-               self.commentImg = [[UIImageView alloc]init];
-               self.commentImg.layer.cornerRadius = 9;
-               self.commentImg.layer.masksToBounds = YES;
-               [self.contentView addSubview:self.commentImg];
+               self.comment = [[UIButton alloc]init];
+               [self.comment setBackgroundImage:IMAGE(@"talk") forState:UIControlStateNormal];
+               self.comment.layer.cornerRadius = 9;
+               self.comment.layer.masksToBounds = YES;
+               [self.contentView addSubview:self.comment];
                
                self.comNum = [[UILabel alloc]init];
                self.comNum.textAlignment = 0; //文字居左
                self.comNum.font = FONT(12);
                [self.contentView addSubview:self.comNum];
                
-               self.collectImg = [[UIImageView alloc]init];
-               self.collectImg.layer.cornerRadius = 9;
-               self.collectImg.layer.masksToBounds = YES;
-               [self.contentView addSubview:self.collectImg];
+               self.collect = [[UIButton alloc]init];
+               [self.collect setBackgroundImage:IMAGE(@"star") forState:UIControlStateNormal];
+               self.collect.layer.cornerRadius = 9;
+               self.collect.layer.masksToBounds = YES;
+               [self.contentView addSubview:self.collect];
                
                self.colNum = [[UILabel alloc]init];
                self.colNum.textAlignment = 2; //文字居右
@@ -99,20 +101,22 @@
                [self.contentView addSubview:self.tagLabel1];
                
                
-               self.commentImg1 = [[UIImageView alloc]init];
-               self.commentImg1.layer.cornerRadius = 9;
-               self.commentImg1.layer.masksToBounds = YES;
-               [self.contentView addSubview:self.commentImg1];
+               self.comment1 = [[UIButton alloc]init];
+               [self.comment1 setBackgroundImage:IMAGE(@"talk") forState:UIControlStateNormal];
+               self.comment1.layer.cornerRadius = 9;
+               self.comment1.layer.masksToBounds = YES;
+               [self.contentView addSubview:self.comment1];
                
                self.comNum1 = [[UILabel alloc]init];
                self.comNum1.textAlignment = 0; //文字居左
                self.comNum1.font = FONT(12);
                [self.contentView addSubview:self.comNum1];
                
-               self.collectImg1 = [[UIImageView alloc]init];
-               self.collectImg1.layer.cornerRadius = 9;
-               self.collectImg1.layer.masksToBounds = YES;
-               [self.contentView addSubview:self.collectImg1];
+               self.collect1 = [[UIButton alloc]init];
+               [self.collect1 setBackgroundImage:IMAGE(@"star") forState:UIControlStateNormal];
+               self.collect1.layer.cornerRadius = 9;
+               self.collect1.layer.masksToBounds = YES;
+               [self.contentView addSubview:self.collect1];
                
                self.colNum1 = [[UILabel alloc]init];
                self.colNum1.textAlignment = 2; //文字居右
@@ -143,9 +147,9 @@
      //无图时
       self.postTitle.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(50), WIDTH5S(250), HEIGHT5S(20));
      self.tagLabel.frame = CGRectMake(15, HEIGHT5S(82), WIDTH5S(30), HEIGHT5S(18));
-     self.commentImg.frame = CGRectMake(WIDTH5S(219), HEIGHT5S(82), WIDTH5S(18), HEIGHT5S(18));
+     self.comment.frame = CGRectMake(WIDTH5S(219), HEIGHT5S(82), WIDTH5S(18), HEIGHT5S(18));
      self.comNum.frame = CGRectMake(WIDTH5S(179), HEIGHT5S(82), WIDTH5S(35), HEIGHT5S(18));
-     self.collectImg.frame = CGRectMake(WIDTH5S(287), HEIGHT5S(82), WIDTH5S(18), HEIGHT5S(18));
+     self.collect.frame = CGRectMake(WIDTH5S(287), HEIGHT5S(82), WIDTH5S(18), HEIGHT5S(18));
      self.colNum.frame = CGRectMake(WIDTH5S(247), HEIGHT5S(82), WIDTH5S(35), HEIGHT5S(15));
      self.line.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(109), WIDTH5S(290), HEIGHT5S(1));
      
@@ -153,9 +157,9 @@
       self.postTitle1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(50), WIDTH5S(220), HEIGHT5S(20));
      self.img.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(80), WIDTH5S(290), HEIGHT5S(150));
      self.tagLabel1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(242), WIDTH5S(30), HEIGHT5S(18));
-     self.commentImg1.frame = CGRectMake(WIDTH5S(219), HEIGHT5S(242), WIDTH5S(18), HEIGHT5S(18));
+     self.comment1.frame = CGRectMake(WIDTH5S(219), HEIGHT5S(242), WIDTH5S(18), HEIGHT5S(18));
      self.comNum1.frame = CGRectMake(WIDTH5S(179), HEIGHT5S(242), WIDTH5S(35), HEIGHT5S(18));
-     self.collectImg1.frame = CGRectMake(WIDTH5S(287), HEIGHT5S(242), WIDTH5S(18), HEIGHT5S(18));
+     self.collect1.frame = CGRectMake(WIDTH5S(287), HEIGHT5S(242), WIDTH5S(18), HEIGHT5S(18));
      self.colNum1.frame = CGRectMake(WIDTH5S(247), HEIGHT5S(242), WIDTH5S(35), HEIGHT5S(15));
      self.line1.frame = CGRectMake(WIDTH5S(15), HEIGHT5S(269), WIDTH5S(290), HEIGHT5S(1));
      

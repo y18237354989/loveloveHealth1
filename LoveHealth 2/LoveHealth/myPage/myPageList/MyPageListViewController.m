@@ -16,6 +16,8 @@
 #import "RegisterViewController.h"
 #import "LogInViewController.h"
 #import "ShoppingCartViewController.h"
+#import "FeedBackViewController.h"
+#import "SetViewController.h"
 
 @interface MyPageListViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -26,7 +28,13 @@
 -(void)viewWillAppear:(BOOL)animated{
      
      self.navigationController.navigationBar.hidden=YES;
-     
+//     
+//     NSUserDefaults *user=[NSUserDefaults standardUserDefaults];
+//     
+//     NSString *userid=[[user objectForKey:@"usermessage"] objectForKey:@"user_nickname"];
+//     
+//     
+//     [self createControl];
 }
 
 - (void)viewDidLoad {
@@ -67,13 +75,22 @@
      [self.registerBtn setTitle:@"登录" forState:UIControlStateNormal];
      [self.registerBtn setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
      [self.bgView addSubview:self.registerBtn];
+     self.registerBtn.alpha = 1;
      [self.registerBtn addTarget:self action:@selector(LogIn) forControlEvents:UIControlEventTouchUpInside];
      
      self.logInBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(165), HEIGHT5S(130), WIDTH5S(40), HEIGHT5S(30))];
      [self.logInBtn setTitle:@"注册" forState:UIControlStateNormal];
      [self.logInBtn setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
      [self.bgView addSubview:self.logInBtn];
+     self.logInBtn.alpha = 1;
      [self.logInBtn addTarget:self action:@selector(Register) forControlEvents:UIControlEventTouchUpInside];
+     
+     self.userNickName = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(100), HEIGHT5S(130), WIDTH5S(120), HEIGHT5S(30))];
+     [self.userNickName setTitle:@"000" forState:UIControlStateNormal];
+     [self.userNickName setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
+     self.userNickName.alpha = 0;
+     [self.bgView addSubview:self.userNickName];
+     
      
 }
 //注册
@@ -106,9 +123,9 @@
      int num;
      
      if (section == 0) {
-          num = 5;
+          num = 4;
      }else if (section == 1){
-          num = 2;
+          num = 3;
      }
      
      return num;
@@ -131,9 +148,15 @@
      
      //添加分割线
      if (indexPath.section == 0) {
-          if (indexPath.row == 4) {
+          
+          if (indexPath.row == 3) {
                
+          }else{
+               UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(43), WIDTH5S(290), HEIGHT5S(1))];
+               line.backgroundColor = COLOR(228, 228, 228, 1);
+               [cell addSubview:line];
           }
+          
      }else{
           
           UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(43), WIDTH5S(290), HEIGHT5S(1))];
@@ -146,7 +169,7 @@
      if (indexPath.section == 0) {
           textLab.text = arr[indexPath.row];
      }else{
-          textLab.text = arr[indexPath.row + 5];
+          textLab.text = arr[indexPath.row + 4];
      }
      
      
@@ -179,19 +202,27 @@
                MyOrderViewController *mvc = [[MyOrderViewController alloc]init];
                [self.navigationController pushViewController:mvc animated:YES];
                
-          }else if (indexPath.row == 4){
-               
-               ShoppingCartViewController *svc = [[ShoppingCartViewController alloc]init];
-               svc.hidesBottomBarWhenPushed = YES;
-               [self.navigationController pushViewController:svc animated:YES];
           }
           
      }else if (indexPath.section == 1){
           
-          if (indexPath.row == 0) {
+          if (indexPath.row == 1) {
                
-          }else if (indexPath.row == 1){
+               FeedBackViewController *fvc = [[FeedBackViewController alloc]init];
+               fvc.hidesBottomBarWhenPushed = YES;
+               [self.navigationController pushViewController:fvc animated:YES];
                
+          }else if (indexPath.row == 2){
+               
+               SetViewController *svc = [[SetViewController alloc]init];
+               svc.hidesBottomBarWhenPushed = YES;
+               [self.navigationController pushViewController:svc animated:YES];
+               
+          }else if (indexPath.row == 0){
+               
+               ShoppingCartViewController *svc = [[ShoppingCartViewController alloc]init];
+               svc.hidesBottomBarWhenPushed = YES;
+               [self.navigationController pushViewController:svc animated:YES];
           }
      }
      

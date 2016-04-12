@@ -12,6 +12,8 @@
 
 @property (strong, nonatomic)UITableView *orderTable;
 
+@property (strong, nonatomic)UIButton *state1,*state2,*state3,*state4,*state5;  //订单状态
+
 @property (strong, nonatomic)NSMutableArray *orderArr;  //订单数组
 
 @property (strong, nonatomic)NSMutableDictionary *orderDic;  //订单信息字典

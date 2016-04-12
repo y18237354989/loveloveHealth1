@@ -10,6 +10,7 @@
 #import "Header.h"
 #import "RegisterServerceViewController.h"
 #import "AppDelegate.h"
+#import "PhoneMessageViewController.h"
 
 @interface RegisterViewController ()<UITextFieldDelegate>
 
@@ -108,40 +109,16 @@
 //获取验证码
 - (void)code{
      
-     [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:self.userNumberText.text zone:@"86" customIdentifier:nil result:^(NSError *error) {
-          if (!error) {
-               NSLog(@"获取验证成功");
-          }else{
-               NSLog(@"错误信息:%@",error);
-          }
-     }];
+     [PhoneMessageViewController PhoneNum:self.userNumberText.text];
+     
 }
 
 
 
 - (void)registerUser{
-     
-     //先验证信息  再注册
-//     [SMSSDK commitVerificationCode:self.codeText.text phoneNumber:self.userNumberText.text zone:@"86" result:^(NSError *error) {
-//          if (!error) {
-//               NSLog(@"验证成功");
-//               NSMutableDictionary *dics = [NSMutableDictionary dictionaryWithCapacity:0];
-//               [dics setObject:self.userNumberText.text forKey:@"tel"];
-//               [dics setObject:self.passwordText.text forKey:@"pwd"];
-//               
-//               [RegisterServerceViewController registerUser:dics and:^(NSMutableDictionary *dic) {
-//                    
-//                    if (dic == Nil) {
-//                         NSLog(@"register file");
-//                    }else{
-//                         [self.navigationController popViewControllerAnimated:YES];
-//                    }
-//               }];
-//          }else{
-//               NSLog(@"错误信息:%@",error);
-//          }
-//     }];
-     
+  
+     //验证输入验证码是否匹配
+     [PhoneMessageViewController CodeNum:self.codeText.text andPhoneNum:self.userNumberText.text];
      
      NSMutableDictionary *dics = [NSMutableDictionary dictionaryWithCapacity:0];
      [dics setObject:self.userNumberText.text forKey:@"tel"];

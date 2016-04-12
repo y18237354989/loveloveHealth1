@@ -15,7 +15,7 @@
 @property (strong, nonatomic)UILabel *orderNumber;  //订单号
 @property (strong, nonatomic)UILabel *date;  //购买时间
 @property (strong, nonatomic)UILabel *number;  //购买数量
-@property (strong, nonatomic)UILabel *isSend; //发货状态
+@property (strong, nonatomic)UIButton *isPay; //付款状态
 @property (strong, nonatomic)UIButton *comment; //评论
 
 @end

@@ -51,7 +51,7 @@
     
     self.cell1arr1 = @[@"drugs",@"cooking",@"weights"];
     self.cell1arr2 = @[@"常用西药",@"养生中药",@"健身器材"];
-    self.cell2arr1 = @[@"1.jpg",@"2.jpg",@"3.jpg"];
+    self.cell2arr1 = @[@"1.jpg",@"1.4.jpg",@"1.5.jpg"];
     self.cell2arr2 = @[@"瘦身机",@"健身车",@"中药祛痘"];
 }
 
@@ -68,7 +68,7 @@
     flowLayout.headerReferenceSize = CGSizeMake(self.view.frame.size.width, 150);
     
     self.collectView = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height) collectionViewLayout:flowLayout];
-    self.collectView.backgroundColor = COLOR(228, 228, 228, 1);
+    self.collectView.backgroundColor = COLOR(255, 255, 255, 1);
     //设置代理
     self.collectView.delegate = self;
     self.collectView.dataSource = self;
@@ -142,7 +142,7 @@
         static NSString *identify = @"cell";
         GoodsTypeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
         [cell sizeToFit];
-        cell.backgroundColor = [UIColor whiteColor];
+        cell.backgroundColor = COLOR(228, 228, 228, 1);
         cell.goodsImage.image = [UIImage imageNamed:self.cell1arr1[indexPath.row]];
         cell.goodsType.text = self.cell1arr2[indexPath.row];
         
@@ -152,7 +152,7 @@
         QualityGoodsCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
         [cell sizeToFit];
 
-        cell.backgroundColor = [UIColor whiteColor];
+        cell.backgroundColor = COLOR(228, 228, 228, 1);
         cell.goodsImage.image = [UIImage imageNamed:self.cell2arr1[indexPath.row]];
         cell.goodsName.text = @"瘦身机";
         self.nameStr = cell.goodsName.text;
@@ -162,7 +162,7 @@
         static NSString *identify = @"cell3";
         GoodShopCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
         [cell sizeToFit];
-        cell.backgroundColor = [UIColor whiteColor];
+        cell.backgroundColor = COLOR(228, 228, 228, 1);
         cell.goodsImage.image = [UIImage imageNamed:self.cell2arr1[indexPath.row]];
         cell.goodsName.text = self.cell2arr2[indexPath.row];
         return cell;
@@ -171,7 +171,7 @@
         GuessLikeCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:identify forIndexPath:indexPath];
         [cell sizeToFit];
 
-        cell.backgroundColor = [UIColor whiteColor];
+        cell.backgroundColor = COLOR(228, 228, 228, 1);
         cell.goodsImage.image = [UIImage imageNamed:self.cell2arr1[indexPath.row]];
         cell.goodsName.text = @"瘦身机瘦身机瘦身机瘦身机瘦身机";
         return cell;

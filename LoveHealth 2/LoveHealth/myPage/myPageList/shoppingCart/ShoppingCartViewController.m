@@ -34,15 +34,17 @@
 
 @implementation ShoppingCartViewController
 
-- (void)viewDidAppear:(BOOL)animated{
+- (void)viewWillAppear:(BOOL)animated{
+     
      self.navigationController.navigationBar.hidden = NO;
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor=[UIColor whiteColor];
-    self.navigationItem.title = @"购物车";
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+     self.navigationItem.title = @"购物车";
+     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     self.i = 0;
     self.mutArr = [NSMutableArray arrayWithCapacity:0];
@@ -84,7 +86,7 @@
     allChooseLabel.textAlignment = NSTextAlignmentLeft;
     [self.shopView addSubview:allChooseLabel];
     //合计
-    self.countLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(150), HEIGHT5S(14), WIDTH5S(30), HEIGHT5S(20))];
+    self.countLabel = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(140), HEIGHT5S(14), WIDTH5S(40), HEIGHT5S(20))];
     self.countLabel.text = @"合计:";
     self.countLabel.font = FONT(15);
     self.countLabel.textAlignment = NSTextAlignmentRight;

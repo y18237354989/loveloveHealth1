@@ -25,6 +25,8 @@
      if (self) {
           self = [super  initWithStyle:style reuseIdentifier:reuseIdentifier];
           self.goodsImg = [[UIImageView alloc]init];
+          self.goodsImg.layer.cornerRadius = 5;
+          self.goodsImg.layer.masksToBounds = YES;
           [self.contentView addSubview:self.goodsImg];
           
           self.goodsName = [[UILabel alloc]init];
@@ -44,9 +46,9 @@
           self.number.font = FONT(12);
           [self.contentView addSubview:self.number];
           
-          self.isSend = [[UILabel alloc]init];
-          self.isSend.font = FONT(15);
-          [self.contentView addSubview:self.isSend];
+          self.isPay = [[UIButton alloc]init];
+          self.isPay.titleLabel.font = FONT(15);
+          [self.contentView addSubview:self.isPay];
           
           self.comment = [[UIButton alloc]init];
           [self.comment setTitle:@"评价" forState:UIControlStateNormal];
@@ -68,7 +70,7 @@
      self.date.frame = CGRectMake(15, HEIGHT5S(60), WIDTH5S(100), HEIGHT5S(15));
      self.number.frame = CGRectMake(WIDTH5S(125), HEIGHT5S(60), WIDTH5S(60), HEIGHT5S(15));
      self.comment.frame = CGRectMake(WIDTH5S(255), HEIGHT5S(10), WIDTH5S(50), HEIGHT5S(25));
-     self.isSend.frame = CGRectMake(WIDTH5S(255), HEIGHT5S(50), WIDTH5S(50), HEIGHT5S(25));
+     self.isPay.frame = CGRectMake(WIDTH5S(255), HEIGHT5S(50), WIDTH5S(50), HEIGHT5S(25));
      
 }
 

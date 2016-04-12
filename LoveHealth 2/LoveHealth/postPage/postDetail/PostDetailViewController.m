@@ -64,6 +64,8 @@
      self.postDetailTable.tableFooterView = [[UIView alloc]init];
      [self.view addSubview:self.postDetailTable];
      
+     [self createTableHead];
+     [self createCommentView];
      //获取帖子详情（请求数据）
      [self requestdetail];
      // 获取评论内容（请求数据）
@@ -90,8 +92,7 @@
           NSDictionary *dic1=dics;
           NSArray *arr=[dic1 objectForKey:@"result"];
           self.dic =arr[0];
-          [self createTableHead];
-          [self createCommentView];
+          
      }];
      
 }
@@ -293,6 +294,12 @@
           //得到分享到的微博平台名
           NSLog(@"share to sns name is %@",[[response.data allKeys] objectAtIndex:0]);
      }
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+     NSString *str  = @"评论区";
+     
+     return str;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{

@@ -22,4 +22,6 @@
 
 @property (strong, nonatomic)UIButton *logInBtn;  //登录
 
+@property (strong, nonatomic)UIButton *userNickName;  //用户昵称
+
 @end

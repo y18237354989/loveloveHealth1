@@ -17,10 +17,13 @@
 
 @property (strong, nonatomic)NSMutableDictionary *recommentDic; //回复data
 
-@property (strong, nonatomic)UITextView *reCommentTextView;//回复输入区
-
 @property (assign, nonatomic)long int num;
 
+@property(strong,nonatomic)UIView *replyview;
+
+@property(strong,nonatomic)UITextField  *texts;
+
+@property(strong,nonatomic)UIButton   *send;
 
 //自适应label高
 @property (assign, nonatomic)double height;
@@ -28,6 +31,11 @@
 @end
 
 @implementation ResendViewController
+
+- (void)viewWillAppear:(BOOL)animated{
+     
+     self.navigationController.navigationBar.hidden = NO;
+}
 
 - (void)viewDidLoad {
      [super viewDidLoad];
@@ -39,9 +47,20 @@
      self.wordArr = [NSMutableArray arrayWithCapacity:0];
      self.recommentDic = [NSMutableDictionary dictionaryWithCapacity:0];
      
+     self.resendTable = [[UITableView alloc]initWithFrame:CGRectMake(WIDTH5S(0), HEIGHT5S(0), SCREEN_WIDTH, HEIGHT5S(520)) style:UITableViewStylePlain];
+     self.resendTable.delegate = self;
+     self.resendTable.dataSource = self;
+     [self.view addSubview:self.resendTable];
+    self.resendTable.tableFooterView=[[UIView alloc]init];
+     
+//     self.resendTable.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(WIDTH5S(0), HEIGHT5S(0), SCREEN_WIDTH, HEIGHT5S(160))];
+//     [self.resendTable addSubview:self.resendTable.tableHeaderView];
+//     
+//     [self createControl];
+    [self createReplyView];
      [self requestData];
      
-     [self createControl];
+
 }
 
 //请求回复数据
@@ -58,47 +77,35 @@
                self.wordArr = [dic objectForKey:@"result"];
                NSLog(@"%@",self.wordArr);
                self.num = self.wordArr.count;
+               
           }
           
-//          [self.resendTable reloadData];
+          [self.resendTable reloadData];
      }];
 }
 
-
-- (void)createControl{
-     
-     self.resendTable = [[UITableView alloc]initWithFrame:CGRectMake(WIDTH5S(0), HEIGHT5S(0), SCREEN_WIDTH, HEIGHT5S(504)) style:UITableViewStylePlain];
-     self.resendTable.delegate = self;
-     self.resendTable.dataSource = self;
-     [self.view addSubview:self.resendTable];
-     
-     self.resendTable.tableHeaderView = [[UIView alloc]initWithFrame:CGRectMake(WIDTH5S(0), HEIGHT5S(0), SCREEN_WIDTH, HEIGHT5S(160))];
-     [self.resendTable addSubview:self.resendTable.tableHeaderView];
-     
-     self.woreText = [[UITextView alloc]initWithFrame:CGRectMake(WIDTH5S(0), HEIGHT5S(0), SCREEN_WIDTH, HEIGHT5S(120))];
-     self.woreText.textColor = COLOR(100, 100, 100, 1);
-     self.woreText.font = FONT(15);
-     self.woreText.delegate = self;
-     self.woreText.returnKeyType = UIReturnKeyDefault;
-     self.woreText.scrollEnabled = YES;//可拖动
-     self.woreText.editable = YES;//可编辑
-     self.woreText.autoresizingMask = UIViewAutoresizingFlexibleHeight;//自适高
-     [self.resendTable.tableHeaderView addSubview:self.woreText];
-     
-     self.cancle = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(15), HEIGHT5S(130), WIDTH5S(40), HEIGHT5S(20))];
-     [self.cancle setTitle:@"取消" forState:UIControlStateNormal];
-     [self.cancle setBackgroundColor:COLOR(0, 210, 210, 1)];
-     [self.cancle addTarget:self action:@selector(cancleBtn) forControlEvents:UIControlEventTouchUpInside];
-     [self.resendTable.tableHeaderView addSubview:self.cancle];
-     
-     self.ok = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(265), HEIGHT5S(130), WIDTH5S(40), HEIGHT5S(20))];
-     [self.ok setTitle:@"确定" forState:UIControlStateNormal];
-     [self.ok setBackgroundColor:COLOR(0, 210, 210, 1)];
-     [self.ok addTarget:self action:@selector(okBtn) forControlEvents:UIControlEventTouchUpInside];
-     [self.resendTable.tableHeaderView addSubview:self.ok];
-     
-     
+//回复
+- (void)createReplyView{
+    
+    self.replyview = [[UIView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(520), SCREEN_WIDTH, HEIGHT5S(48))];
+    self.replyview.backgroundColor = COLOR(228, 228, 228, 1);
+    [self.view addSubview:self.replyview];
+    
+    self.texts = [[UITextField alloc]initWithFrame:CGRectMake(WIDTH5S(15), 10, WIDTH5S(220), HEIGHT5S(28))];
+    self.texts.backgroundColor = COLOR(255, 255, 255, 1);
+    self.texts.layer.cornerRadius = 10;
+    self.texts.placeholder = @"  回复";
+    [self.replyview addSubview:self.texts];
+    
+    self.send = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(240), 10, WIDTH5S(40), HEIGHT5S(28))];
+    [self.send setTitle:@"发送" forState:UIControlStateNormal];
+    [self.send setTitleColor:COLOR(150, 150, 150, 1) forState:UIControlStateNormal];
+    [self.send addTarget:self action:@selector(okBtn) forControlEvents:UIControlEventTouchUpInside];
+    [self.replyview addSubview:self.send];
+    
 }
+
+
 
 //取消发送
 - (void)cancleBtn{
@@ -116,18 +123,32 @@
      
      [self.recommentDic setObject:@"1" forKey:@"userid"];
      [self.recommentDic setObject:self.commentId forKey:@"postcommentid"];
-     [self.recommentDic setObject:self.reCommentTextView.text forKey:@"postreplyword"];
+     [self.recommentDic setObject:self.texts.text forKey:@"postreplyword"];
      [self.recommentDic setObject:[dateFormatter stringFromDate:[NSDate date]] forKey:@"postreplytime"];
      
-     //回复录入数据库
-     [PostCommentServerceViewController postRecomm:self.recommentDic and:^(NSDictionary *dic) {
+     if (self.texts.text.length == 0) {
           
-          NSLog(@"+++%@",dic);
-     }];
+          UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"回复内容不能为空" preferredStyle:UIAlertControllerStyleAlert];
+          UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+               
+          }];
+          [alert addAction:action];
+          [self presentViewController:alert animated:YES completion:nil];
+          
+     }else{
+        
+          //回复录入数据库
+          [PostCommentServerceViewController postRecomm:self.recommentDic and:^(NSDictionary *dic) {
+               
+               NSLog(@"+++%@",dic);
+          }];
+          
+     }
+     
      
 //     //重新请求恢复数据并刷新table
-//     [self requestData];
-     [self.resendTable reloadData];
+     [self requestData];
+//     [self.resendTable reloadData];
      [self.view endEditing:YES];
      
 }
@@ -152,7 +173,7 @@
      [cell setIntroductionText:str1];
      cell.username.text = [self.wordArr[indexPath.row] objectForKey:@"user_nickname"];
      cell.time.text = [self.wordArr[indexPath.row] objectForKey:@"postreply_time"];
-//     cell.sendword.text = [self.wordArr[indexPath.row]objectForKey:@"postreply_word"];
+
      self.height=cell.frame.size.height;
      
      return cell;
@@ -163,14 +184,5 @@
      
 }
 
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

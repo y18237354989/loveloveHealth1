@@ -53,7 +53,52 @@
      [self.navigation.leftBtn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
      [self.navigation.rightBtn addTarget:self action:@selector(delete) forControlEvents:UIControlEventTouchUpInside];
      
-     self.orderTable = [[UITableView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(64), SCREEN_WIDTH, HEIGHT5S(504)) style:UITableViewStylePlain];
+     self.state1 = [[UIButton alloc]initWithFrame:CGRectMake(0, HEIGHT5S(64), WIDTH5S(64), HEIGHT5S(40))];
+     self.state1.titleLabel.font = FONT(15);
+     [self.state1 setTitle:@"全部" forState:UIControlStateNormal];
+     [self.state1 setTitleColor:COLOR(0, 0, 0, 1) forState:UIControlStateNormal];
+     [self.state1 setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateSelected];
+     self.state1.selected = YES;
+     self.state1.backgroundColor = COLOR(255, 255, 255, 1);
+     [self.view addSubview:self.state1];
+     
+     self.state2 = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(64), HEIGHT5S(64), WIDTH5S(64), HEIGHT5S(40))];
+     self.state2.titleLabel.font = FONT(15);
+     [self.state2 setTitle:@"已付款" forState:UIControlStateNormal];
+     [self.state2 setTitleColor:COLOR(0, 0, 0, 1) forState:UIControlStateNormal];
+     [self.state2 setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateSelected];
+     self.state2.backgroundColor = COLOR(255, 255, 255, 1);
+     [self.view addSubview:self.state2];
+     
+     self.state3 = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(128), HEIGHT5S(64), WIDTH5S(64), HEIGHT5S(40))];
+     self.state3.titleLabel.font = FONT(15);
+     [self.state3 setTitle:@"未付款" forState:UIControlStateNormal];
+     [self.state3 setTitleColor:COLOR(0, 0, 0, 1) forState:UIControlStateNormal];
+     [self.state3 setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateSelected];
+     self.state3.backgroundColor = COLOR(255, 255, 255, 1);
+     [self.view addSubview:self.state3];
+     
+     self.state4 = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(192), HEIGHT5S(64), WIDTH5S(64), HEIGHT5S(40))];
+     self.state4.titleLabel.font = FONT(15);
+     [self.state4 setTitle:@"已评价" forState:UIControlStateNormal];
+     [self.state4 setTitleColor:COLOR(0, 0, 0, 1) forState:UIControlStateNormal];
+     [self.state4 setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateSelected];
+     self.state4.backgroundColor = COLOR(255, 255, 255, 1);
+     [self.view addSubview:self.state4];
+     
+     self.state5 = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(256), HEIGHT5S(64), WIDTH5S(64), HEIGHT5S(40))];
+     self.state5.titleLabel.font = FONT(15);
+     [self.state5 setTitle:@"未评价" forState:UIControlStateNormal];
+     [self.state5 setTitleColor:COLOR(0, 0, 0, 1) forState:UIControlStateNormal];
+     [self.state5 setTitleColor:COLOR(0, 210, 210, 1) forState:UIControlStateSelected];
+     self.state5.backgroundColor = COLOR(255, 255, 255, 1);
+     [self.view addSubview:self.state5];
+     
+     UILabel *line = [[UILabel alloc]initWithFrame:CGRectMake(0, HEIGHT5S(103), SCREEN_WIDTH, HEIGHT5S(1))];
+     line.backgroundColor = COLOR(228, 228, 228, 1);
+     [self.view addSubview:line];
+     
+     self.orderTable = [[UITableView alloc]initWithFrame:CGRectMake(0, HEIGHT5S(104), SCREEN_WIDTH, HEIGHT5S(416)) style:UITableViewStylePlain];
      self.orderTable.dataSource = self;
      self.orderTable.delegate = self;
      [self.view addSubview:self.orderTable];
@@ -102,7 +147,7 @@
      cell.orderNumber.text = @"1111111111";
      cell.date.text = [self.orderArr[indexPath.row] objectForKey:@"buyDate"];
      cell.number.text = [NSString stringWithFormat:@"数量:%@",[self.orderArr[indexPath.row] objectForKey:@"buyNumber"]];
-     cell.isSend.text = @"已发货";
+     cell.isPay.titleLabel.text = @"已付款";
      [cell.comment addTarget:self action:@selector(goComment) forControlEvents:UIControlEventTouchUpInside];
      
      return cell;
@@ -141,7 +186,7 @@
      self.typebtn1 = [[UIButton alloc]initWithFrame:CGRectMake(15, HEIGHT5S(160), WIDTH5S(38), HEIGHT5S(20))];
      self.typebtn1.layer.cornerRadius = 5;
      self.typebtn1.layer.masksToBounds = YES;
-     [self.typebtn1 setFont:FONT(12)];
+     self.typebtn1.titleLabel.font = FONT(12);
      [self.typebtn1 setTitle:@"质量好" forState:UIControlStateNormal];
      self.typebtn1.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn1 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -153,7 +198,7 @@
      self.typebtn2 = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(63), HEIGHT5S(160), WIDTH5S(26), HEIGHT5S(20))];
      self.typebtn2.layer.cornerRadius = 5;
      self.typebtn2.layer.masksToBounds = YES;
-     [self.typebtn2 setFont:FONT(12)];
+     self.typebtn2.titleLabel.font = FONT(12);
      [self.typebtn2 setTitle:@"便宜" forState:UIControlStateNormal];
      self.typebtn2.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn2 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -165,7 +210,7 @@
      self.typebtn3 = [[UIButton alloc]initWithFrame:CGRectMake(99, HEIGHT5S(160), WIDTH5S(50), HEIGHT5S(20))];
      self.typebtn3.layer.cornerRadius = 5;
      self.typebtn3.layer.masksToBounds = YES;
-     [self.typebtn3 setFont:FONT(12)];
+     self.typebtn3.titleLabel.font = FONT(12);
      [self.typebtn3 setTitle:@"快递不错" forState:UIControlStateNormal];
      self.typebtn3.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn3 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -177,7 +222,7 @@
      self.typebtn4 = [[UIButton alloc]initWithFrame:CGRectMake(159, HEIGHT5S(160), WIDTH5S(38), HEIGHT5S(20))];
      self.typebtn4.layer.cornerRadius = 5;
      self.typebtn4.layer.masksToBounds = YES;
-     [self.typebtn4 setFont:FONT(12)];
+     self.typebtn4.titleLabel.font = FONT(12);
      [self.typebtn4 setTitle:@"款式新" forState:UIControlStateNormal];
      self.typebtn4.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn4 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -189,7 +234,7 @@
      self.typebtn5 = [[UIButton alloc]initWithFrame:CGRectMake(207, HEIGHT5S(160), WIDTH5S(38), HEIGHT5S(20))];
      self.typebtn5.layer.cornerRadius = 5;
      self.typebtn5.layer.masksToBounds = YES;
-     [self.typebtn5 setFont:FONT(12)];
+     self.typebtn5.titleLabel.font = FONT(12);
      [self.typebtn5 setTitle:@"态度好" forState:UIControlStateNormal];
      self.typebtn5.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn5 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];
@@ -201,7 +246,7 @@
      self.typebtn6 = [[UIButton alloc]initWithFrame:CGRectMake(255, HEIGHT5S(160), WIDTH5S(50), HEIGHT5S(20))];
      self.typebtn6.layer.cornerRadius = 5;
      self.typebtn6.layer.masksToBounds = YES;
-     [self.typebtn6 setFont:FONT(12)];
+     self.typebtn6.titleLabel.font = FONT(12);
      [self.typebtn6 setTitle:@"大小合适" forState:UIControlStateNormal];
      self.typebtn6.backgroundColor = COLOR(204, 255, 255, 1);
      [self.typebtn6 setTitleColor:COLOR(228, 228, 228, 1) forState:UIControlStateNormal];

@@ -21,7 +21,6 @@
 @property (strong,nonatomic)UIView *bottomView;
 @property (strong,nonatomic)UIButton *serviceBtn; //客服按钮
 @property (strong,nonatomic)UIButton *shopBtn;  //店铺按钮
-@property (strong,nonatomic)UIButton *shopCarBtn;  //加入购物车按钮
 @property (strong,nonatomic)UIButton *buyBtn;  //立即购买按钮
 @property (strong,nonatomic)UILabel *label;  //底部分隔线
 @property (strong,nonatomic)UILabel *assess1, *assess2, *assess3, *assess4, *assess5, *assess6;  //评价类
@@ -30,11 +29,9 @@
 @property (assign, nonatomic)float height;  //评论label高度
 
 @property (strong,nonatomic)UIView *backGroundView; //背景灰色（透明度）
-@property (strong,nonatomic)UIView *cartView;  //购物车
 @property (strong,nonatomic)UIView *buyView;  //购买
 @property (assign,nonatomic)int numberHave;  //商品库存数量
-@property (assign,nonatomic)int number;  //添加商品数量（添加到购物车）
-@property (assign,nonatomic)int number1;  //添加商品数量（直接购买）
+@property (assign,nonatomic)int number;  //添加商品数量（直接购买）
 @property (strong,nonatomic)UILabel *cartNum;  //购物车添加数量
 @property (strong,nonatomic)UILabel *buyNum;  //直接支付数量
 
@@ -70,11 +67,12 @@
      [self createHeadScroll];
      [self createOtherPart];
      [self createBottomView];
-     [self createShopCart];
      [self createShopBuy];
      
      self.i = 1;
      
+     
+     //刷新评论列表
      self.goodsDetail.mj_footer = [MJRefreshAutoNormalFooter footerWithRefreshingBlock:^{
           self.i = self.i +3;
           [self.goodsDetail reloadData];
@@ -140,17 +138,10 @@
      [self.shopBtn addTarget:self action:@selector(test:) forControlEvents:UIControlEventTouchUpInside];
      [self.view addSubview:self.shopBtn];
      
-     self.shopCarBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(120), HEIGHT5S(519), WIDTH5S(100), HEIGHT5S(49))];
-     self.shopCarBtn.backgroundColor = COLOR(0, 204, 204, 1);
-     [self.shopCarBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
-     self.shopCarBtn.tag = 3;
-     [self.shopCarBtn addTarget:self action:@selector(test:) forControlEvents:UIControlEventTouchUpInside];
-     [self.view addSubview:self.shopCarBtn];
-     
-     self.buyBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(220), HEIGHT5S(519), WIDTH5S(100), HEIGHT5S(49))];
-     self.buyBtn.backgroundColor = COLOR(0, 204, 102, 1);
-     [self.buyBtn setTitle:@"立即购买" forState:UIControlStateNormal];
-     self.buyBtn.tag = 4;
+     self.buyBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(120), HEIGHT5S(519), WIDTH5S(200), HEIGHT5S(49))];
+     self.buyBtn.backgroundColor = COLOR(0, 210, 210, 1);
+     [self.buyBtn setTitle:@"添加订单" forState:UIControlStateNormal];
+     self.buyBtn.tag = 3;
      [self.buyBtn addTarget:self action:@selector(test:) forControlEvents:UIControlEventTouchUpInside];
      [self.view addSubview:self.buyBtn];
      
@@ -375,77 +366,6 @@
      
 }
 
-//购物车弹出页面控件创建
-- (void)createShopCart{
-     
-     self.backGroundView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
-     self.backGroundView.backgroundColor = [UIColor grayColor];
-     self.backGroundView.alpha = 0;
-     [self.view addSubview:self.backGroundView];
-     
-     self.cartView = [[UIView alloc]initWithFrame:CGRectMake(0, SCREEN_HEIGHT, SCREEN_WIDTH, HEIGHT5S(300))];
-     self.cartView.backgroundColor = [UIColor whiteColor];
-     [self.view addSubview:self.cartView];
-     
-     UIImageView *goodsImg = [[UIImageView alloc]initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, HEIGHT5S(170))];
-     goodsImg.backgroundColor = COLOR(228, 228, 228, 1);
-     [self.cartView addSubview:goodsImg];
-     
-     UILabel *numLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, HEIGHT5S(180), WIDTH5S(40), HEIGHT5S(20))];
-     numLabel.text = @"库存:";
-     numLabel.font = FONT(12);
-     [self.cartView addSubview:numLabel];
-     
-     UILabel *numData = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(60), HEIGHT5S(180), WIDTH5S(40), HEIGHT5S(20))];
-     self.numberHave = 1500;
-     numData.text = [NSString stringWithFormat:@"%d",self.numberHave];
-     numData.font = FONT(12);
-     [self.cartView addSubview:numData];
-     
-     UILabel *lines = [[UILabel alloc]initWithFrame:CGRectMake(0, HEIGHT5S(209), SCREEN_WIDTH, HEIGHT5S(1))];
-     lines.backgroundColor = COLOR(228, 228, 228, 1);
-     [self.cartView addSubview:lines];
-     
-     UILabel *buyNumLabel = [[UILabel alloc]initWithFrame:CGRectMake(15, HEIGHT5S(220), WIDTH5S(60), HEIGHT5S(20))];
-     buyNumLabel.text = @"购买数量";
-     buyNumLabel.font = FONT(12);
-     [self.cartView addSubview:buyNumLabel];
-     
-     UIButton *reduceBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(225), HEIGHT5S(220), WIDTH5S(20), HEIGHT5S(20))];
-     [reduceBtn setTitle:@"-" forState:UIControlStateNormal];
-     [reduceBtn setBackgroundColor:COLOR(228, 228, 228, 1)];
-     [self.cartView addSubview:reduceBtn];
-     
-     UIButton *addBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(285), HEIGHT5S(220), WIDTH5S(20), HEIGHT5S(20))];
-     [addBtn setBackgroundColor:COLOR(228, 228, 228, 1)];
-     [addBtn setTitle:@"+" forState:UIControlStateNormal];
-     [self.cartView addSubview:addBtn];
-     
-     self.cartNum = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(245), HEIGHT5S(220), WIDTH5S(60), HEIGHT5S(20))];
-     self.cartNum.textAlignment = 1;
-     self.number = 0;
-     self.cartNum.text = [NSString stringWithFormat:@"%d",self.number];
-     self.cartNum.font = FONT(12);
-     [self.cartView addSubview:self.cartNum];
-     
-     UIButton *goCart = [[UIButton alloc]initWithFrame:CGRectMake(0, HEIGHT5S(250), SCREEN_WIDTH, HEIGHT5S(50))];
-     [goCart setBackgroundColor:COLOR(0, 210, 210, 1)];
-     [goCart setTitle:@"去购物车结算" forState:UIControlStateNormal];
-     [goCart setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
-     [self.cartView addSubview:goCart];
-     
-     UIButton *back = [[UIButton alloc]initWithFrame:CGRectMake(15, 15, WIDTH5S(20), HEIGHT5S(20))];
-     [back setBackgroundImage:[UIImage imageNamed:@"back_48px_1125197_easyicon.net"] forState:UIControlStateNormal];
-     [self.cartView addSubview:back];
-     
-     //点击事件
-     [reduceBtn addTarget:self action:@selector(reduce) forControlEvents:UIControlEventTouchUpInside];
-     [addBtn addTarget:self action:@selector(add) forControlEvents:UIControlEventTouchUpInside];
-     [back addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-     [goCart addTarget:self action:@selector(goCart) forControlEvents:UIControlEventTouchUpInside];
-     
-}
-
 //购买弹出页面控件创建
 - (void)createShopBuy{
      
@@ -489,14 +409,14 @@
      
      self.buyNum = [[UILabel alloc]initWithFrame:CGRectMake(WIDTH5S(245), HEIGHT5S(220), WIDTH5S(60), HEIGHT5S(20))];
      self.buyNum.textAlignment = 1;
-     self.number1 = 0;
-     self.buyNum.text = [NSString stringWithFormat:@"%d",self.number1];
+     self.number = 0;
+     self.buyNum.text = [NSString stringWithFormat:@"%d",self.number];
      self.buyNum.font = FONT(12);
      [self.buyView addSubview:self.buyNum];
      
      UIButton *goCart = [[UIButton alloc]initWithFrame:CGRectMake(0, HEIGHT5S(250), SCREEN_WIDTH, HEIGHT5S(50))];
      [goCart setBackgroundColor:COLOR(0, 210, 210, 1)];
-     [goCart setTitle:@"去支付" forState:UIControlStateNormal];
+     [goCart setTitle:@"确认添加" forState:UIControlStateNormal];
      [goCart setTitleColor:COLOR(255, 255, 255, 1) forState:UIControlStateNormal];
      [self.buyView addSubview:goCart];
      
@@ -505,10 +425,10 @@
      [self.buyView addSubview:back];
      
      //点击事件
-     [reduceBtn addTarget:self action:@selector(reduce1) forControlEvents:UIControlEventTouchUpInside];
-     [addBtn addTarget:self action:@selector(add1) forControlEvents:UIControlEventTouchUpInside];
+     [reduceBtn addTarget:self action:@selector(reduce) forControlEvents:UIControlEventTouchUpInside];
+     [addBtn addTarget:self action:@selector(add) forControlEvents:UIControlEventTouchUpInside];
      [back addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-     [goCart addTarget:self action:@selector(goCart1) forControlEvents:UIControlEventTouchUpInside];
+     [goCart addTarget:self action:@selector(goCart) forControlEvents:UIControlEventTouchUpInside];
 }
 
 //选择颜色、款型
@@ -520,32 +440,17 @@
 - (void)reduce{
      if (self.number > 0) {
           self.number--;
-          self.cartNum.text = [NSString stringWithFormat:@"%d",self.number];
-     }else{
-          
-     }
-     
-}
-- (void)add{
-     
-     self.number++;
-     self.cartNum.text = [NSString stringWithFormat:@"%d",self.number];
-     NSLog(@"++");
-}
-- (void)reduce1{
-     if (self.number1 > 0) {
-          self.number1--;
-          self.buyNum.text = [NSString stringWithFormat:@"%d",self.number1];
+          self.buyNum.text = [NSString stringWithFormat:@"%d",self.number];
      }else{
           
      }
      
 }
 
-- (void)add1{
+- (void)add{
      
-     self.number1++;
-     self.buyNum.text = [NSString stringWithFormat:@"%d",self.number1];
+     self.number++;
+     self.buyNum.text = [NSString stringWithFormat:@"%d",self.number];
      [self.goodsDic setObject:self.buyNum.text forKey:@"buyNumber"];
      NSLog(@"++");
 }
@@ -554,18 +459,14 @@
 - (void)back{
      
      [UIView animateWithDuration:0.5 animations:^{
-          self.cartView.frame = CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(300));
+          
           self.buyView.frame = CGRectMake(0, HEIGHT5S(568), SCREEN_WIDTH, HEIGHT5S(300));
           self.backGroundView.alpha = 0;
      }];
 }
-//家入购物车
-- (void)goCart{
-     
-}
 
 //去支付
-- (void)goCart1{
+- (void)goCart{
      
      //存入购买数量
      [self.goodsDic setObject:self.buyNum.text forKey:@"buyNumber"];
@@ -579,6 +480,24 @@
           NSLog(@"seccess");
           NSLog(@"%@",dataArr);
      }];
+     
+     //去支付或者保留订单继续购买
+     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"订单结果" message:self.buyNum.text preferredStyle:UIAlertControllerStyleActionSheet];
+     
+     UIAlertAction *action1 = [UIAlertAction actionWithTitle:@"再看看" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+          
+          [self.navigationController popViewControllerAnimated:YES];
+     }];
+     
+     UIAlertAction *action2 = [UIAlertAction actionWithTitle:@"去付款" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+          
+          NSLog(@"跳至付款界面");
+     }];
+     
+     [alert addAction:action1];
+     [alert addAction:action2];
+     [self presentViewController:alert animated:YES completion:nil];
+
      
 }
 #pragma mark - 底部四个按钮执行方法
@@ -599,16 +518,8 @@
           
      }else if (sender.tag == 2){
           
-     }else if (sender.tag == 3){
-          self.number = 0;
-          
-          [UIView animateWithDuration:0.5 animations:^{
-               self.cartView.frame = CGRectMake(0, HEIGHT5S(268), SCREEN_WIDTH, HEIGHT5S(300));
-               self.backGroundView.alpha = 0.4;
-          }];
-          
      }else{
-          self.number1 = 0;
+          self.number = 0;
           
           [UIView animateWithDuration:0.5 animations:^{
                self.buyView.frame = CGRectMake(0, HEIGHT5S(268), SCREEN_WIDTH, HEIGHT5S(300));
