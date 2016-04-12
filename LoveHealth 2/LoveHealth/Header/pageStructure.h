@@ -39,4 +39,12 @@
       4-4 修改密码页
  */
 
+/*
+ //CGRectMake(0, 0, 1, 1)可以直接返回到UITableView的最顶端
+ 
+ [tableview scrollRectToVisible:CGRectMake(0, 0, 1, 1) animated:NO];
+ 
+ */
+
+
 #endif /* pageStructure_h */

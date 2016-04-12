@@ -17,15 +17,18 @@
 //获取验证码
 + (void)PhoneNum:(NSString *)phoneNum{
      
+
      [SMSSDK getVerificationCodeByMethod:SMSGetCodeMethodSMS phoneNumber:phoneNum zone:@"86" customIdentifier:nil result:^(NSError *error) {
           if (!error) {
                NSLog(@"获取验证成功");
+          
           }else{
                NSLog(@"错误信息:%@",error);
           }
      }];
 }
 
+//匹配验证码
 + (void)CodeNum:(NSString *)codeNUm andPhoneNum:(NSString *)phoneNum{
      
      [SMSSDK commitVerificationCode:codeNUm phoneNumber:phoneNum zone:@"86" result:^(NSError *error) {
@@ -38,6 +41,21 @@
 }
 
 
++(void)CodeNum:(NSString *)codeNUm andPhoneNum:(NSString *)phoneNum and:(void (^)(NSString *))success{
+     
+     [SMSSDK commitVerificationCode:codeNUm phoneNumber:phoneNum zone:@"86" result:^(NSError *error) {
+          if (!error) {
+               NSLog(@"验证成功");
+               NSString *str = @"success";
+               success(str);
+          }else{
+               NSLog(@"错误信息:%@",error);
+               NSString *str = @"file";
+               success(str);
+          }
+     }];
+     
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];

@@ -234,9 +234,10 @@
 
 //发帖方法
 -(void)sendPostNew{
+     
      NSUserDefaults *user=[NSUserDefaults standardUserDefaults];
      
-     NSString *userid=[[user objectForKey:@"usermessage"] objectForKey:@"user_id"];
+     NSString *userid=[user objectForKey:@"usermessage"];
      
      if ([self.titleText.text isEqualToString:@""]||[self.contentView.text isEqualToString:@""]||(self.type == nil)) {
           NSLog(@"标题或内容为空");

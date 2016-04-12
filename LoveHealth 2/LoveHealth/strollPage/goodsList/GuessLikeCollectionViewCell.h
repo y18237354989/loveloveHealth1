@@ -16,5 +16,10 @@
 
 @property (strong,nonatomic)UILabel *goodsPriceLabel;
 
+@property (strong,nonatomic)UILabel *label1;
+
+@property (strong,nonatomic)UILabel *label2;
+
+@property (strong,nonatomic)UILabel *goodsNum;
 
 @end

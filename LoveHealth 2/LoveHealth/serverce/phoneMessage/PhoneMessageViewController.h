@@ -13,6 +13,6 @@
 //获取验证码方法
 + (void)PhoneNum:(NSString *)phoneNum;
 //验证验证码方法
-+ (void)CodeNum:(NSString *)phoneNum andPhoneNum:(NSString *)phoneNum;
-
++ (void)CodeNum:(NSString *)codeNUm andPhoneNum:(NSString *)phoneNum;
++ (void)CodeNum:(NSString *)codeNUm andPhoneNum:(NSString *)phoneNum and:(void(^)(NSString *str))success;
 @end

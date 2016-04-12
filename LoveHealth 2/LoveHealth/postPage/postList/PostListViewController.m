@@ -80,38 +80,64 @@
 //请求数据
 -(void)getpostdata{
      
-     if ([self.typeNumStr isEqualToString:@"0"]) {
-          self.typeNumStr = @"1";
-     }
-     
      NSString *str  = [NSString stringWithFormat:@"%d",self.n];
-     NSDictionary *dic =@{@"postType":self.typeNumStr,
-                          @"pageindex":str
-                          };
-     [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
-          
-          
-          if ([[dics objectForKey:@"message"] isEqualToString:@"查询失败"] ) {
-               self.a= 1;
-               if (_result.count == 0) {
+     
+     if ([self.typeNumStr isEqualToString:@"0"]) {
+          //请求全部数据
+          [PostServerce allPostData:str andWith:^(NSDictionary *dics) {
+              
+               if ([[dics objectForKey:@"message"] isEqualToString:@"查询失败"] ) {
+                    self.a= 1;
+                    if (_result.count == 0) {
+                         
+                         self.i = 0;
+                    }
                     
-                    self.i = 0;
+               }else{
+                    if ([[dics objectForKey:@"message"]isEqualToString:@"查询成功"]) {
+                         self.a = 0;
+                         NSMutableArray *arr = [dics objectForKey:@"result"];
+                         [self.result addObjectsFromArray:arr];
+                         
+                         self.i = _result.count;
+                         
+                    }
                }
+               [self.postTable reloadData];
                
-          }else{
-               if ([[dics objectForKey:@"message"]isEqualToString:@"查询成功"]) {
-                    self.a = 0;
-                    NSMutableArray *arr = [dics objectForKey:@"result"];
-                    [self.result addObjectsFromArray:arr];
+          }];
+     }else{
+          
+          NSDictionary *dic =@{@"postType":self.typeNumStr,
+                               @"pageindex":str
+                              };
+          //请求单个标签类别数据
+          [PostServerce getPostWithDic:dic andWith:^(NSDictionary *dics) {
+               
+               
+               if ([[dics objectForKey:@"message"] isEqualToString:@"查询失败"] ) {
+                    self.a= 1;
+                    if (_result.count == 0) {
+                         
+                         self.i = 0;
+                    }
                     
-                    self.i = _result.count;
-                    
-                    
-                    
+               }else{
+                    if ([[dics objectForKey:@"message"]isEqualToString:@"查询成功"]) {
+                         self.a = 0;
+                         NSMutableArray *arr = [dics objectForKey:@"result"];
+                         [self.result addObjectsFromArray:arr];
+                         
+                         self.i = _result.count;
+                         
+                         
+                         
+                    }
                }
-          }
-          [self.postTable reloadData];
-     }];
+               [self.postTable reloadData];
+          }];
+          
+     }
 }
 
 
@@ -162,7 +188,7 @@
           
           if (self.a == 1) {
                [self.postTable.mj_footer endRefreshingWithNoMoreData];
-//               self.postTable.mj_footer.hidden = YES;
+               //               self.postTable.mj_footer.hidden = YES;
           }
           
      }];

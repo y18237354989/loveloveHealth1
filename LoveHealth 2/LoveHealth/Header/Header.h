@@ -48,6 +48,12 @@
 #define FONT(f) [UIFont systemFontOfSize:f]
 #define IMAGE(name) [UIImage imageNamed:name]
 
+#define TEXT_RECT(x,y,width,height) [[UITextField alloc]initWithFrame:CGRectMake(x, y, width, height)]
+#define LABEL_RECT(x,y,width,height) [[UILabel alloc]initWithFrame:CGRectMake(x, y, width, height)]
+#define BUTTON_RECT(x,y,width,height) [[UIButton alloc]initWithFrame:CGRectMake(x, y, width, height)]
+#define IMAGE_RECT(x,y,width,height) [[UIIMageView alloc]initWithFrame:CGRectMake(x, y, width, height)]
+#define VIEW_RECT(x,y,width,height) [[UIView alloc]initWithFrame:CGRectMake(x, y, width, height)]
+#define TABLE_RECT(x,y,width,height) [[UITableView alloc]initWithFrame:CGRectMake(x, y, width, height)]
 //#define APPKEY @"41801ee08ae0867389dcd7d455363123"
 
 #endif /* Header_h */

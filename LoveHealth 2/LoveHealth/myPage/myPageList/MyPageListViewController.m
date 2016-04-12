@@ -18,6 +18,7 @@
 #import "ShoppingCartViewController.h"
 #import "FeedBackViewController.h"
 #import "SetViewController.h"
+#import "PersonDataViewController.h"
 
 @interface MyPageListViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -28,13 +29,7 @@
 -(void)viewWillAppear:(BOOL)animated{
      
      self.navigationController.navigationBar.hidden=YES;
-//     
-//     NSUserDefaults *user=[NSUserDefaults standardUserDefaults];
-//     
-//     NSString *userid=[[user objectForKey:@"usermessage"] objectForKey:@"user_nickname"];
-//     
-//     
-//     [self createControl];
+
 }
 
 - (void)viewDidLoad {
@@ -52,6 +47,14 @@
      [self.myTable addSubview:self.myTable.tableHeaderView];
      
      [self createControl];
+     
+
+}
+//前往个人资料
+- (void)goToUserMessage{
+     
+     PersonDataViewController *dvc = [[PersonDataViewController alloc]init];
+     [self.navigationController pushViewController:dvc animated:YES];
 }
 
 //创建控件
@@ -67,9 +70,15 @@
      
      self.userHeadImage = [[UIImageView alloc]initWithFrame:CGRectMake(WIDTH5S(120), HEIGHT5S(40), WIDTH5S(80), HEIGHT5S(80))];
      self.userHeadImage.image = IMAGE(@"1.2.jpg");
+     self.userHeadImage.userInteractionEnabled = YES; //可交互状态
      self.userHeadImage.layer.cornerRadius = 40;
      self.userHeadImage.layer.masksToBounds = YES;
      [self.bgView addSubview:self.userHeadImage];
+     
+     //单击手势
+     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(goToUserMessage)];
+     gesture.numberOfTapsRequired = 1; //单击
+     [self.userHeadImage addGestureRecognizer:gesture];
      
      self.registerBtn = [[UIButton alloc]initWithFrame:CGRectMake(WIDTH5S(115), HEIGHT5S(130), WIDTH5S(40), HEIGHT5S(30))];
      [self.registerBtn setTitle:@"登录" forState:UIControlStateNormal];

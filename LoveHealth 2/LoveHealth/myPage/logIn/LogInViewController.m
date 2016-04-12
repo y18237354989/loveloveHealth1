@@ -11,6 +11,7 @@
 #import "LogInServerceViewController.h"
 #import "RegisterViewController.h"
 #import "MyPageListViewController.h"
+#import "ChangePasswordViewController.h"
 
 @interface LogInViewController ()<UITextFieldDelegate>
 
@@ -86,9 +87,17 @@
      self.logInBtn.layer.masksToBounds =YES;
      [self.view addSubview:self.logInBtn];
      
+     self.changePassword = BUTTON_RECT(WIDTH5S(245), HEIGHT5S(274), WIDTH5S(60), HEIGHT5S(20));
+     self.changePassword.titleLabel.font = FONT(12);
+     [self.changePassword setTitle:@"修改密码" forState:UIControlStateNormal];
+     [self.changePassword setTitleColor:COLOR(0, 0, 200, 1) forState:UIControlStateNormal];
+     [self.view addSubview:self.changePassword];
+     
      
      [self.registerBtn addTarget:self action:@selector(goToRegister) forControlEvents:UIControlEventTouchUpInside];
      [self.logInBtn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];
+     [self.changePassword addTarget:self action:@selector(changePasswords) forControlEvents:UIControlEventTouchUpInside];
+     
 }
 //去注册
 - (void)goToRegister{
@@ -96,6 +105,14 @@
      RegisterViewController *rvc = [[RegisterViewController alloc]init];
      [self.navigationController pushViewController:rvc animated:YES];
 }
+
+//修改密码
+- (void)changePasswords{
+     
+     ChangePasswordViewController *pvc = [[ChangePasswordViewController alloc]init];
+     [self.navigationController pushViewController:pvc animated:YES];
+}
+
 //登录
 - (void)logIn{
      
@@ -105,17 +122,22 @@
      
      [LogInServerceViewController logInUser:dics and:^(NSMutableDictionary *dic) {
           
-          if (dic == nil) {
-               NSLog(@"logIn file");
+          if ([[dic objectForKey:@"message"] isEqualToString:@"登录失败"]) {
+               UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"密码错误" preferredStyle:UIAlertControllerStyleAlert];
+               UIAlertAction *action = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:nil];
+               [alert addAction:action];
+               [self presentViewController:alert animated:YES completion:nil];
+               self.passwordText.text = @"";
+               
           }else{
                NSLog(@"%@",dic);
                
                NSUserDefaults  *user=[NSUserDefaults standardUserDefaults];
                NSArray *arr=[dic objectForKey:@"result"];
                
-               [user setObject:[arr[0] objectForKey:@"user_id"] forKey:@"userid"];
-               [user setObject:[arr[0] objectForKey:@"user_nickname"] forKey:@"usernickname"];
+               NSString *dics = [arr[0] objectForKey:@"user_id"];
                
+               [user setObject:dics forKey:@"usermessage"];
                
                [self.navigationController popViewControllerAnimated:YES];
           }

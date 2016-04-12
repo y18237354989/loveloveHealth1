@@ -11,6 +11,7 @@
 
 @implementation PostServerce
 
+//发帖
 +(void)sendPostWithDic:(NSDictionary *)dic andWith:(void (^)(NSDictionary *))success{
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -37,6 +38,26 @@
 
 }
 
+//请求全部帖子
++(void)allPostData:(NSString *)str andWith:(void (^)(NSDictionary *))success{
+     
+     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+     
+     manager.responseSerializer = [AFJSONResponseSerializer serializer];
+     
+     NSString *url = [NSString stringWithFormat:@"http://139.129.50.9/Healthapp/index.php/home/post/allpost?pageindex=%@",str];
+     
+     [manager GET:url parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+     
+          NSDictionary *dics = responseObject;
+          success(dics);
+          
+     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+          NSLog(@"file");
+     }];
+}
+
+//分类请求
 +(void)getPostWithDic:(NSDictionary *)dic andWith:(void (^)(NSDictionary *))success{
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
@@ -55,6 +76,7 @@
     }];
 }
 
+//详情
 +(void)getPostContentWithDic:(NSDictionary *)dic andWith:(void (^)(NSDictionary *))success{
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     

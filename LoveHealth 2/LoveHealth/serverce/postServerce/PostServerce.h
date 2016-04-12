@@ -13,6 +13,8 @@
 +(void)sendPostWithDic:(NSDictionary *)dic andWith:(void(^)(NSDictionary *dics))success;
 
 
++(void)allPostData:(NSString *)str andWith:(void(^)(NSDictionary *dics))success;
+
 +(void)getPostWithDic:(NSDictionary *)dic andWith:(void(^)(NSDictionary *dics))success;
 
 +(void)getPostContentWithDic:(NSDictionary *)dic andWith:(void(^)(NSDictionary *dics))success;

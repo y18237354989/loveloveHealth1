@@ -145,6 +145,13 @@
      self.f=cell.frame.size.height;
      return cell;
 }
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+     NSString *str  = @"评论区";
+     
+     return str;
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
      
      
